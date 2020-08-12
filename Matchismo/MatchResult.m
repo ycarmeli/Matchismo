@@ -19,30 +19,31 @@
 @implementation MatchResult
 
 - (instancetype)initWithScore:(int)score{
-    if (self = [super init]){
-        _score = score;
-        _resultStringsArray = [[NSMutableArray alloc] init];
-      _matchedCards = [[NSMutableArray alloc] init];
+  if (self = [super init]){
+    _score = score;
+    _resultStringsArray = [[NSMutableArray alloc] init];
+    _matchedCards = [[NSMutableArray alloc] init];
 
-    }
-    return self;
+  }
+  return self;
 }
 
 - (instancetype)initWithScore:(int)score
-            withStringsArray:(NSMutableArray*)resultStringsArray{
-    if (self = [super init]){
-        _score = score;
-        _resultStringsArray = resultStringsArray;
-      _matchedCards = [[NSMutableArray alloc] init];
+             withStringsArray:(NSMutableArray*)resultStringsArray{
+  
+  if (self = [super init]){
+    _score = score;
+    _resultStringsArray = resultStringsArray;
+    _matchedCards = [[NSMutableArray alloc] init];
 
-    }
-    return self;
+  }
+  return self;
 }
 - (instancetype)initWithScore:(int)score withStringsArray:(NSArray *)resultStringsArray withMatchedCards:(NSArray *)matchedCards{
   
   if (self = [super init]){
-      _score = score;
-      _resultStringsArray = resultStringsArray;
+    _score = score;
+    _resultStringsArray = resultStringsArray;
     _matchedCards = matchedCards;
 
   }

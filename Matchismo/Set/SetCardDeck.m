@@ -18,26 +18,26 @@
 
 - (instancetype)initWithSymbols:(NSArray *)symbolsArray{
   
-    if (self = [super init]){
-      _symbolsArray = symbolsArray;
-      _colorsArray = @[@"R",@"G",@"B"];
-      _shapeFillArray = @[@"Full",@"Half",@"Empty"];
-      _cardsValues = [SetCardDeck createCardsValues];
-    }
-    return self;
+  if (self = [super init]){
+    _symbolsArray = symbolsArray;
+    _colorsArray = @[@"R",@"G",@"B"];
+    _shapeFillArray = @[@"Full",@"Half",@"Empty"];
+    _cardsValues = [SetCardDeck createCardsValues];
+  }
+  return self;
     
 }
 
 - (instancetype)initWithSymbols:(NSArray *)symbolsArray usingColors:(NSArray *)colorsArray{
 
-    if (self = [super init]){
-      _symbolsArray = symbolsArray;
-      _colorsArray = colorsArray;
-      _shapeFillArray = @[@"Full",@"Half",@"Empty"];
-      _cardsValues = [SetCardDeck createCardsValues];
+  if (self = [super init]){
+    _symbolsArray = symbolsArray;
+    _colorsArray = colorsArray;
+    _shapeFillArray = @[@"Full",@"Half",@"Empty"];
+    _cardsValues = [SetCardDeck createCardsValues];
 
-    }
-    return self;
+  }
+  return self;
     
     
 }
@@ -61,11 +61,11 @@
   
   NSMutableArray *cardsValues = [[NSMutableArray alloc]init];
   
-  for (int s = 1;s<4;s++){
-    for (int n = 1;n<4;n++){
-      for (int c = 1;c<4;c++){
-        for (int f = 1;f<4;f++){
-          [cardsValues addObject:@(s*1000+n*100+c*10+f)];
+  for (int s = 1;s < 4;s++){
+    for (int n = 1;n < 4;n++){
+      for (int c = 1;c < 4;c++){
+        for (int f = 1;f < 4 ;f++){
+          [cardsValues addObject:@( (s * 1000) + (n * 100) + (c * 10) + f )];
         }
       }
     }
@@ -74,7 +74,7 @@
 }
 
 
-- (Card *) drawCard{
+- (nullable Card *) drawCard{
 
   Card *newCard = nil;
   

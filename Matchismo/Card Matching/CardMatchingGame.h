@@ -18,22 +18,22 @@
 
 @interface CardMatchingGame : NSObject
 
-@property (nonatomic,readonly) int score;
-@property (strong,nonatomic) NSMutableArray<MatchResult*>* matchResults;
-@property (strong,nonatomic) NSMutableArray<Card*>* cards;
+
+
+- (instancetype) initWithCardCount:(NSUInteger)cardCount
+    usingDeck:(Deck*)deck
+    cardMatchMode:(int)mode NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
+
+- (void) chooseCardAtIndex:(int)cardIndex;
+- (Card *) cardAtIndex:(int)cardIndex;
+
+
+@property (readonly,nonatomic) int score;
+@property (strong,nonatomic) NSMutableArray<MatchResult*> *matchResults;
+@property (strong,nonatomic) NSMutableArray<Card*> *cards;
 @property (nonatomic) int matchMode;
-
--(instancetype) initWithCardCount:(NSUInteger)cardCount
-                        usingDeck:(Deck*)deck
-                    cardMatchMode:(int)mode NS_DESIGNATED_INITIALIZER;
-
--(instancetype)init NS_UNAVAILABLE;
-
--(void) chooseCardAtIndex:(int)cardIndex;
--(Card*) cardAtIndex:(int)cardIndex;
-
-
-
 
 @end
 

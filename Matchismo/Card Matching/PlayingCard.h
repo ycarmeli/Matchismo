@@ -17,14 +17,14 @@
 
 @interface PlayingCard : Card
 
-@property(nonatomic)NSString* rank;
-@property(strong,nonatomic)NSString* suit;
-
-+(NSArray<NSString*>*)validRanks;
-+(NSArray<NSString*>*)validSuits;
 
 
++ (NSArray<NSString *> *)validRanks;
++ (NSArray<NSString *> *)validSuits;
 
+
+@property(nonatomic)NSString *rank;
+@property(strong,nonatomic)NSString *suit;
 
 
 @end

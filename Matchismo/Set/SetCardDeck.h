@@ -18,14 +18,14 @@
 
 @interface SetCardDeck : Deck
 
+
+
+- (instancetype)initWithSymbols:(NSArray *)symbolsArray;
+- (instancetype)initWithSymbols:(NSArray *)symbolsArray usingColors:(NSArray *)colorsArray;
+- (instancetype)init;
+
 @property (strong, nonatomic) NSArray *symbolsArray;
 @property (strong, nonatomic) NSArray *colorsArray;
 @property (strong, nonatomic) NSArray *shapeFillArray;
-
-- (instancetype)initWithSymbols:(NSArray *)symbolsArray;
-
-- (instancetype)initWithSymbols:(NSArray *)symbolsArray usingColors:(NSArray *)colorsArray;
-
-- (instancetype)init;
 
 @end

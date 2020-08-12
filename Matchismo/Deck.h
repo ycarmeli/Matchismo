@@ -16,8 +16,8 @@
 
 @interface Deck : NSObject
 
--(void)addCard:(Card*)card atTop:(BOOL)atTop; // addCard:atTop
--(void)addCard:(Card*)card; //addCard
--(Card*) drawCard;
+- (void)addCard:(Card *)card atTop:(BOOL)atTop; // addCard:atTop
+- (void)addCard:(Card *)card; //addCard
+- (Card *)drawCard;
 
 @end

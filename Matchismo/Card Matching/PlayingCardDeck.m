@@ -16,18 +16,18 @@
 @implementation PlayingCardDeck
 
 -(instancetype)init{
-    self = [super init];
-    if (self){
-        for (NSString* rank in [PlayingCard validRanks]) {
-            for (NSString* suit in [PlayingCard validSuits]) {
-                PlayingCard* card = [[PlayingCard alloc ]init];
-                card.rank = rank;
-                card.suit = suit;
-                [self addCard:card];
-            }
-        }
+  self = [super init];
+  if (self){
+    for (NSString* rank in [PlayingCard validRanks]) {
+      for (NSString* suit in [PlayingCard validSuits]) {
+        PlayingCard* card = [[PlayingCard alloc ]init];
+        card.rank = rank;
+        card.suit = suit;
+        [self addCard:card];
+      }
     }
-    return self;
+  }
+  return self;
 }
 
 @end

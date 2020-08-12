@@ -17,13 +17,12 @@
 
 @interface SetCard : Card
 
-
-@property (nonatomic) NSString* symbol;
-@property (nonatomic) NSString* numberOfSymbols;
-@property (nonatomic) NSString* color;
-@property (nonatomic) NSString* fillType;
-
 - (NSString *) contents;
+
+@property (nonatomic) NSString *symbol;
+@property (nonatomic) NSString *numberOfSymbols;
+@property (nonatomic) NSString *color;
+@property (nonatomic) NSString *fillType;
 
 
 @end

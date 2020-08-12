@@ -18,7 +18,7 @@
 
 
 
-- (MatchResult*)match:(NSArray*)otherCards{
+- (MatchResult *)match:(NSArray*)otherCards{
     
   int score =0;
 
@@ -37,7 +37,7 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
 }
 
 
-- (nullable NSString *) getItemStatus:(NSArray *)otherCards item:(NSString *) item{
+- (nullable NSString *)getItemStatus:(NSArray *)otherCards item:(NSString *) item{
   
   if ([self isAllCardsWithSameItem:otherCards itemToCompare:item] ){
     return [NSString stringWithFormat:@"The cards have the same %@!",item];
@@ -48,7 +48,7 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
   return nil;
 }
 
-- (BOOL) isAllCardsWithSameItem:(NSArray *)otherCards itemToCompare:(NSString *)item{
+- (BOOL)isAllCardsWithSameItem:(NSArray *)otherCards itemToCompare:(NSString *)item{
   
   if ([otherCards count] != 2){
     return NO;
@@ -69,7 +69,7 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
 }
 
 
-- (BOOL) isAllCardsWithDifferentItem:(NSArray *)otherCards itemToCompare:(NSString *)item{
+- (BOOL)isAllCardsWithDifferentItem:(NSArray *)otherCards itemToCompare:(NSString *)item{
   if ([otherCards count] != 2){
     return NO;
   }
@@ -89,7 +89,7 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
 }
 
 
-- (NSString *) cardToItem:(NSString *)item{
+- (NSString *)cardToItem:(NSString *)item{
   
   if ([item isEqualToString:@"symbol"]){
     return self.symbol;

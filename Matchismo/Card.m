@@ -14,17 +14,17 @@
 
 @implementation Card
 
--(MatchResult*)match:(NSArray*)otherCards{
+- (MatchResult *)match:(NSArray *)otherCards{
     
-    int score =0;
-    for (Card* otherCard in otherCards){
-        
-        if ([self.contents isEqualToString:otherCard.contents]){
-            score = 1;
-        }
+  int score =0;
+  for (Card *otherCard in otherCards){
+      
+    if ([self.contents isEqualToString:otherCard.contents]){
+      score = 1;
     }
-    
-    return [[MatchResult alloc]initWithScore:score];
+  }
+  
+  return [[MatchResult alloc]initWithScore:score];
 }
 
 

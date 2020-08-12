@@ -17,18 +17,20 @@
 
 @interface Game : NSObject
 
-@property (nonatomic,readonly) int score;
-@property (strong,nonatomic) MatchResult* matchResult;
-@property (strong,nonatomic) NSMutableArray<Card*>* cards;
+- (instancetype) initWithCardCount:(NSUInteger)cardCount
+                         usingDeck:(Deck *)deck;
+
+- (instancetype)init NS_UNAVAILABLE;
+
+- (void) chooseCardAtIndex:(int)cardIndex;
+- (Card*) cardAtIndex:(int)cardIndex;@property (nonatomic,readonly) int score;
 
 
--(instancetype) initWithCardCount:(NSUInteger)cardCount
-                        usingDeck:(Deck *)deck;
+@property (strong,nonatomic) MatchResult *matchResult;
+@property (strong,nonatomic) NSMutableArray<Card *> *cards;
 
--(instancetype)init NS_UNAVAILABLE;
 
--(void) chooseCardAtIndex:(int)cardIndex;
--(Card*) cardAtIndex:(int)cardIndex;
+
 
 
 

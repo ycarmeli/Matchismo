@@ -19,13 +19,15 @@
 @interface SetGame : NSObject
 
 
-- (instancetype) initWithCardCount:(NSUInteger)cardCount
-    usingDeck:(Deck*)deck NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCardCount:(NSUInteger)cardCount
+    usingDeck:(Deck *)deck NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (void) chooseCardAtIndex:(int)cardIndex;
-- (Card*) cardAtIndex:(int)cardIndex;
+- (Card *) cardAtIndex:(int)cardIndex;
 
-@property (nonatomic,readonly) int score;
-@property (strong,nonatomic) NSMutableArray<MatchResult*>* matchResults;
-@property (strong,nonatomic) NSMutableArray<Card*>* cards;
+@property (readonly,nonatomic) int score;
+@property (strong,nonatomic) NSMutableArray<MatchResult*> *matchResults;
+@property (strong,nonatomic) NSMutableArray<Card*> *cards;
+
 @end

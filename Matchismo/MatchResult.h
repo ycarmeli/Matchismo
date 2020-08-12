@@ -15,14 +15,16 @@
 
 @interface MatchResult : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithScore:(int)score;
+- (instancetype)initWithScore:(int)score withStringsArray:(NSArray *)resultStringsArray;
+- (instancetype)initWithScore:(int)score withStringsArray:(NSArray *)resultStringsArray withMatchedCards:(NSArray *)matchedCards;
+
 - (NSString *) matchedCardsToOneString;
 
 @property (nonatomic) int score;
-@property (strong,nonatomic) NSArray* resultStringsArray;
+@property (strong,nonatomic) NSArray *resultStringsArray;
 @property (strong,nonatomic) NSArray *matchedCards;
--(instancetype)init NS_UNAVAILABLE;
--(instancetype)initWithScore:(int)score;
--(instancetype)initWithScore:(int)score withStringsArray:(NSArray *)resultStringsArray;
--(instancetype)initWithScore:(int)score withStringsArray:(NSArray *)resultStringsArray withMatchedCards:(NSArray *)matchedCards;
+
 
 @end
