@@ -6,22 +6,22 @@
 //  Copyright © 2020 Yossy Carmeli. All rights reserved.
 //
 
-#import "CardMatchingGame.h"
+#import "Game.h"
 
-@interface CardMatchingGame ()
+@interface Game ()
 @property (readwrite,nonatomic) int score;
 @property (strong, nonatomic) NSMutableArray<Card*> *chosenCards;
-@property (strong)NSString *gameType;
 @end
 
-@implementation CardMatchingGame
+@implementation Game
 
 -(instancetype) initWithCardCount:(NSUInteger)cardCount
                         usingDeck:(Deck *)deck
-                    cardsNumForMatch:(int)cardsNumForMatch{
+                  playingGameType:(NSString *)gameType
+                 cardsNumForMatch:(int)cardsNumForMatch{
     
   if (self = [super init]){
-    _gameType = @"Matching Cards";
+    _gameType = gameType;
     _cards = [[NSMutableArray alloc]init];
     _cardsNumForMatch = cardsNumForMatch;
     _score = 0;
@@ -79,13 +79,25 @@
     }
     else{
       self.score += MISMATCH_PENALTY;
-      [self unchooseCardsAndClearChosenCards:self.chosenCards];
+      [self unchooseCardsAndClearChosenCards:chosenCard];
       if ([self.gameType isEqualToString:@"Matching Cards"]){
-        [self.chosenCards addObject:chosenCard];
+        [self keepChosenCardChoosed:chosenCard];
       }
+     
     }
   }
+  
+//  if ([self.gameType isEqualToString:@"Matching Cards"]){
+//    chosenCard.chosen = YES;
+//  }
+
   self.score += COST_TO_CHOOSE;
+  
+}
+
+- (void)keepChosenCardChoosed:(Card *)chosenCard{
+  [self.chosenCards addObject:chosenCard];
+  chosenCard.chosen = YES;
   
 }
 
@@ -114,11 +126,12 @@
   [self.chosenCards removeAllObjects];
 }
 
-- (void)unchooseCardsAndClearChosenCards:(NSMutableArray<Card*>*) cards{
-  [self.chosenCards removeAllObjects];
-  for (Card *card in cards){
+- (void)unchooseCardsAndClearChosenCards:(Card *)chosenCard{
+  for (Card *card in self.chosenCards){
     card.chosen = NO;
   }
+  [self.chosenCards removeAllObjects];
+  chosenCard.chosen = NO;
 }
 
 - (void)unhooseCardAndRemoveFromChosenCards:(Card *)card{

@@ -8,7 +8,7 @@
 
 #import "CardMatchingViewController.h"
 #import "PlayingCardDeck.h"
-#import "CardMatchingGame.h"
+#import "Game.h"
 #import "HistoryViewController.h"
 
 @class HistoryViewController;
@@ -17,7 +17,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *matchResultLabel;
-@property (strong,nonatomic) CardMatchingGame* game;
+@property (strong,nonatomic) Game* game;
 @property (strong,nonatomic) NSArray<NSAttributedString *> *gameHistory ;
 
 @end
@@ -45,9 +45,7 @@
     
     
     [self flipCardsToBack];
-    _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                              usingDeck:[self createDeck]
-                                          cardMatchMode:3    ];
+    _game = [[Game alloc]initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck] playingGameType:@"Matching Cards" cardsNumForMatch:3];
     [self updateUI];
 }
 
@@ -62,7 +60,6 @@
 - (IBAction)cardClick:(id)sender {
     int buttonIndex = (int)[self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:buttonIndex];
-    
     [self updateUI];
 }
 

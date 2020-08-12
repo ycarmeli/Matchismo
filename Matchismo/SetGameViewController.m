@@ -24,7 +24,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 
 
-@property(strong,nonatomic) SetGame *game;
+@property(strong,nonatomic) Game *game;
 
 @end
 
@@ -40,7 +40,7 @@
 
 - (void) newGame{
   
-  _game = [[SetGame alloc]initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
+  _game = [[Game alloc]initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck] playingGameType:@"SET!" cardsNumForMatch:3];
   [self loadCards];
   [self updateUI];
 }

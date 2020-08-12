@@ -61,8 +61,8 @@
   
   NSMutableArray *cardsValues = [[NSMutableArray alloc]init];
   
-  for (int s = 1;s < 4;s++){
-    for (int n = 1;n < 4;n++){
+  for (int s = 1; s < 4; s++) {
+    for (int n = 1; n < 4; n++) {
       for (int c = 1;c < 4;c++){
         for (int f = 1;f < 4 ;f++){
           [cardsValues addObject:@( (s * 1000) + (n * 100) + (c * 10) + f )];
@@ -74,7 +74,7 @@
 }
 
 
-- (nullable Card *) drawCard{
+- (nullable Card *)drawCard {
 
   Card *newCard = nil;
   

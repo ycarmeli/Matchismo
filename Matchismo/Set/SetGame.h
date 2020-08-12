@@ -12,9 +12,12 @@
 
 #endif /* SetGame_h */
 
+#import "Game.h"
+
 @class Card;
 @class Deck;
 @class MatchResult;
+
 
 @interface SetGame : NSObject
 
@@ -23,11 +26,5 @@
     usingDeck:(Deck *)deck NS_DESIGNATED_INITIALIZER;
 - (instancetype)init NS_UNAVAILABLE;
 
-- (void) chooseCardAtIndex:(int)cardIndex;
-- (Card *) cardAtIndex:(int)cardIndex;
-
-@property (readonly,nonatomic) int score;
-@property (strong,nonatomic) NSMutableArray<MatchResult*> *matchResults;
-@property (strong,nonatomic) NSMutableArray<Card*> *cards;
 
 @end
