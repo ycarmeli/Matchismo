@@ -20,20 +20,20 @@
                   playingGameType:(NSString *)gameType
                  cardsNumForMatch:(int)cardsNumForMatch{
     
-  if (self = [super init]){
+  if (self = [super init]) {
     _gameType = gameType;
     _cards = [[NSMutableArray alloc]init];
     _cardsNumForMatch = cardsNumForMatch;
     _score = 0;
     _chosenCards = [[NSMutableArray alloc]init];
     _matchResults = [[NSMutableArray alloc]init];
-      [self.matchResults addObject:[[MatchResult alloc]initWithScore:0]     ];
-    for (int i=0 ; i < cardCount; i++){
+    [self.matchResults addObject:[[MatchResult alloc]initWithScore:0]     ];
+    for (int i = 0; i < cardCount; i++) {
       Card *card = [deck drawCard];
-      if (card){
+      if (card) {
         [self.cards addObject:card];
       }
-      else{
+      else {
         self = nil;
         break;
       }
@@ -49,49 +49,45 @@
 #define COST_TO_CHOOSE -1;
 
 
-- (void) chooseCardAtIndex:(int)cardIndex{
+- (void) chooseCardAtIndex:(int)cardIndex {
     
   Card *chosenCard = [self cardAtIndex:cardIndex];
   
-  if (chosenCard.matched){
+  if (chosenCard.matched) {
     return;
   }
-  if (chosenCard.chosen){
+  if (chosenCard.chosen) {
     [self unhooseCardAndRemoveFromChosenCards:chosenCard];
     return;
   }
   [self processAFreshChoose:chosenCard];
 }
 
-
-- (void)processAFreshChoose:(Card *)chosenCard{
+- (void)processAFreshChoose:(Card *)chosenCard {
   
   chosenCard.chosen = YES;
   [self.chosenCards addObject:chosenCard];
+  self.score += COST_TO_CHOOSE;
   
-  if ([self isTimeToCheckMatching]){
-    
-    MatchResult *matchResult = [self getMatchResultWith:chosenCard];
-  
-    if ([self isMatch:matchResult]){
-      self.score += matchResult.score * MATCH_BONUS;
-      [self markCardsAsMatchedAndClearChosenCards:self.chosenCards withCard:chosenCard];
-    }
-    else{
-      self.score += MISMATCH_PENALTY;
-      [self unchooseCardsAndClearChosenCards:chosenCard];
-      if ([self.gameType isEqualToString:@"Matching Cards"]){
-        [self keepChosenCardChoosed:chosenCard];
-      }
-     
-    }
+  if (![self isTimeToCheckMatching]) {
+    return;
   }
   
-//  if ([self.gameType isEqualToString:@"Matching Cards"]){
-//    chosenCard.chosen = YES;
-//  }
-
-  self.score += COST_TO_CHOOSE;
+  MatchResult *matchResult = [self getMatchResultWith:chosenCard];
+  
+  if ([self isMatch:matchResult]) {
+    self.score += matchResult.score * MATCH_BONUS;
+    [self markCardsAsMatchedAndClearChosenCards:self.chosenCards withCard:chosenCard];
+  }
+  else {
+    self.score += MISMATCH_PENALTY;
+    [self unchooseCardsAndClearChosenCards:chosenCard];
+    if ([self.gameType isEqualToString:@"Matching Cards"]){
+      [self keepChosenCardChoosed:chosenCard];
+    }
+   
+  }
+  
   
 }
 
