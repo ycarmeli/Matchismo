@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 #import "SetGameViewController.h"
-#import "SetGame.h"
 #import "SetCardDeck.h"
 #import "HistoryViewController.h"
+#import "Game.h"
 
 @class Deck;
 @class SetCardDeck;
