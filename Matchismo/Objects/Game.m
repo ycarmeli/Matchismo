@@ -19,7 +19,7 @@
                         usingDeck:(Deck *)deck
                   playingGameType:(NSString *)gameType
                  cardsNumForMatch:(int)cardsNumForMatch{
-    
+  
   if (self = [super init]) {
     _gameType = gameType;
     _cards = [[NSMutableArray alloc]init];
@@ -40,8 +40,8 @@
     }
   }
   return self;
-    
-    
+  
+  
 }
 
 #define MISMATCH_PENALTY -2
@@ -50,7 +50,7 @@
 
 
 - (void) chooseCardAtIndex:(int)cardIndex {
-    
+  
   Card *chosenCard = [self cardAtIndex:cardIndex];
   
   if (chosenCard.matched) {
@@ -85,9 +85,7 @@
     if ([self.gameType isEqualToString:@"Matching Cards"]){
       [self keepChosenCardChoosed:chosenCard];
     }
-   
   }
-  
   
 }
 

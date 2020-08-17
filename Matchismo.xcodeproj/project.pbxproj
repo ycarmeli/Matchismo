@@ -171,6 +171,9 @@
 		9AA9BEE524D9791A00EDDF5C /* Matchismo */ = {
 			isa = PBXGroup;
 			children = (
+				9ACAF70424EA4B010089063B /* Model */,
+				9ACAF70324EA4AF00089063B /* View Controller */,
+				9ACAF70224EA4ADF0089063B /* View */,
 				9AA2941024E3F875007CA1A0 /* Objects */,
 				9AA2940E24E2A7E2007CA1A0 /* Card Matching */,
 				9AA2940D24E2A7D9007CA1A0 /* Set */,
@@ -209,6 +212,27 @@
 				9AA9BF0F24D9791B00EDDF5C /* Info.plist */,
 			);
 			path = MatchismoUITests;
+			sourceTree = "<group>";
+		};
+		9ACAF70224EA4ADF0089063B /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9ACAF70324EA4AF00089063B /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "View Controller";
+			sourceTree = "<group>";
+		};
+		9ACAF70424EA4B010089063B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
