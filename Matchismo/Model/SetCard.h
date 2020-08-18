@@ -21,8 +21,8 @@
 
 @property (nonatomic) NSString *symbol;
 @property (nonatomic) NSString *numberOfSymbols;
-@property (nonatomic) NSString *color;
-@property (nonatomic) NSString *fillType;
+@property (nonatomic) int color;
+@property (nonatomic) int fillType;
 
 
 @end

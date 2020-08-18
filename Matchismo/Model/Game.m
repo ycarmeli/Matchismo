@@ -137,4 +137,17 @@
   return (cardIndex < [self.cards count])? self.cards[cardIndex] : nil;
 }
 
+- (nullable Card *)drawCard {
+  
+  Card *newCard = nil;
+  
+  if ([self.cards count] ) { // if there are cards left in the deck
+    unsigned int index = arc4random() % [self.cards count]; // choose card
+    newCard = self.cards[index];
+    [self.cards removeObjectAtIndex:index];
+  }
+  return newCard;
+  
+}
+
 @end

@@ -9,7 +9,6 @@
 #import "CardMatchingViewController.h"
 #import "PlayingCardDeck.h"
 #import "Game.h"
-#import "HistoryViewController.h"
 
 @class HistoryViewController;
 
@@ -91,16 +90,6 @@
     [self newGame];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-  
-  if ([segue.identifier isEqualToString:@"History of Card Matching"   ]){
-    if ([segue.destinationViewController isKindOfClass:[HistoryViewController class] ]){
-      HistoryViewController *historyVC = (HistoryViewController *) segue.destinationViewController;
-      historyVC.history = [[self getGameHistory] componentsJoinedByString:@"\n\n"];
-      historyVC.headline = @"Score History Of Card Matching:";
-    }
-  }
-}
 
 - (NSArray *)getGameHistory{
   

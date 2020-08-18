@@ -20,8 +20,8 @@
   
   if (self = [super init]){
     _symbolsArray = symbolsArray;
-    _colorsArray = @[@"R",@"G",@"B"];
-    _shapeFillArray = @[@"Full",@"Half",@"Empty"];
+    _colorsArray = @[@1,@2,@3];
+    _shapeFillArray = @[@1,@2,@3];
     _cardsValues = [SetCardDeck createCardsValues];
   }
   return self;
@@ -33,7 +33,7 @@
   if (self = [super init]){
     _symbolsArray = symbolsArray;
     _colorsArray = colorsArray;
-    _shapeFillArray = @[@"Full",@"Half",@"Empty"];
+    _shapeFillArray = @[@1,@2,@3];
     _cardsValues = [SetCardDeck createCardsValues];
 
   }
@@ -48,8 +48,8 @@
     
   if (self = [super init]){
     _symbolsArray = @[@"▲", @"●", @"■"];
-    _colorsArray = @[@"R",@"G",@"B"];
-    _shapeFillArray = @[@"Full",@"Half",@"Empty"];
+    _colorsArray = @[@1,@2,@3];
+    _shapeFillArray = @[@1,@2,@3];
     _cardsValues = [SetCardDeck createCardsValues];
 
   }
@@ -92,8 +92,8 @@
   SetCard *card = [[SetCard alloc]init];
   card.symbol =  self.symbolsArray[ (value/1000) -1 ];
   card.numberOfSymbols = [NSString stringWithFormat:@"%d",(value/100 % 10)];
-  card.color = self.colorsArray[ ((value / 10) %10)  -1];
-  card.fillType = self.shapeFillArray[ value%10 -1];
+  card.color = [self.colorsArray[ ((value / 10) %10)  -1] intValue];
+  card.fillType = [self.shapeFillArray[ value%10 -1] intValue];
   return card;
   
 }

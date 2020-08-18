@@ -177,37 +177,37 @@
     return _cellSize;
 }
 
-- (NSString *)description
-{
-    NSString *description = [NSString stringWithFormat:@"[%@] fitting %lu cells with aspect ratio %g into %@ -> ", NSStringFromClass([self class]), (unsigned long)self.minimumNumberOfCells, self.cellAspectRatio, NSStringFromCGSize(self.size)];
-    
-    if (!self.rowCount) {
-        description = [description stringByAppendingString:@"invalid input: "];
-        if (!self.minimumNumberOfCells || !self.cellAspectRatio || !self.size.width || !self.size.height) {
-            if (!self.minimumNumberOfCells) description = [description stringByAppendingString:@"minimumNumberOfCells = 0;"];
-            if (!self.cellAspectRatio) description = [description stringByAppendingString:@"cellAspectRatio = 0;"];
-            if (!self.size.width) description = [description stringByAppendingString:@"size.width = 0;"];
-            if (!self.size.height) description = [description stringByAppendingString:@"size.height = 0;"];
-        } else {
-            
-            if (self.minCellWidth || self.minCellHeight) {
-                description = [description stringByAppendingString:@"minimum width or height restricts grid to impossibility"];
-                if (self.minCellWidth && self.minCellHeight) {
-                    description = [description stringByAppendingFormat:@" (minCellWidth = %g, minCellHeight = %g)", self.minCellWidth, self.minCellHeight];
-                } else if (self.minCellWidth) {
-                    description = [description stringByAppendingFormat:@" (minCellWidth = %g)", self.minCellWidth];
-                } else {
-                    description = [description stringByAppendingFormat:@" (minCellHeight = %g)", self.minCellHeight];
-                }
-            } else {
-                description = [description stringByAppendingString:@"internal error"];
-            }
-        }
-    } else {
-        description = [description stringByAppendingFormat:@"%luc x %lur at %@ each", (unsigned long)self.columnCount, (unsigned long)self.rowCount, NSStringFromCGSize(self.cellSize)];
-    }
-    
-    return description;
-}
+//- (NSString *)description
+//{
+//    NSString *description = [NSString stringWithFormat:@"[%@] fitting %lu cells with aspect ratio %g into %@ -> ", NSStringFromClass([self class]), (unsigned long)self.minimumNumberOfCells, self.cellAspectRatio, NSStringFromCGSize(self.size)];
+//
+//    if (!self.rowCount) {
+//        description = [description stringByAppendingString:@"invalid input: "];
+//        if (!self.minimumNumberOfCells || !self.cellAspectRatio || !self.size.width || !self.size.height) {
+//            if (!self.minimumNumberOfCells) description = [description stringByAppendingString:@"minimumNumberOfCells = 0;"];
+//            if (!self.cellAspectRatio) description = [description stringByAppendingString:@"cellAspectRatio = 0;"];
+//            if (!self.size.width) description = [description stringByAppendingString:@"size.width = 0;"];
+//            if (!self.size.height) description = [description stringByAppendingString:@"size.height = 0;"];
+//        } else {
+//
+//            if (self.minCellWidth || self.minCellHeight) {
+//                description = [description stringByAppendingString:@"minimum width or height restricts grid to impossibility"];
+//                if (self.minCellWidth && self.minCellHeight) {
+//                    description = [description stringByAppendingFormat:@" (minCellWidth = %g, minCellHeight = %g)", self.minCellWidth, self.minCellHeight];
+//                } else if (self.minCellWidth) {
+//                    description = [description stringByAppendingFormat:@" (minCellWidth = %g)", self.minCellWidth];
+//                } else {
+//                    description = [description stringByAppendingFormat:@" (minCellHeight = %g)", self.minCellHeight];
+//                }
+//            } else {
+//                description = [description stringByAppendingString:@"internal error"];
+//            }
+//        }
+//    } else {
+//        description = [description stringByAppendingFormat:@"%luc x %lur at %@ each", (unsigned long)self.columnCount, (unsigned long)self.rowCount, NSStringFromCGSize(self.cellSize)];
+//    }
+//
+//    return description;
+//}
 
 @end

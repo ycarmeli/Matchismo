@@ -20,7 +20,7 @@
 
 - (MatchResult *)match:(NSArray*)otherCards{
     
-  int score =0;
+  int score = 0;
 
   NSString *symbolsStatus = [self getItemStatus:otherCards item:@"symbol"];
   NSString *numbersStatus = [self getItemStatus:otherCards item:@"number"];
@@ -98,10 +98,10 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
     return self.numberOfSymbols;
   }
   if ([item isEqualToString:@"color"]){
-    return self.color;
+    return [NSString stringWithFormat:@"%d",self.color];
   }
   if ([item isEqualToString:@"fill"]){
-    return self.fillType;
+    return [NSString stringWithFormat:@"%d",self.fillType];
   }
   return nil;
   
@@ -110,7 +110,7 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
 
 - (NSString *)contents{
   //return @"BLA";
-  return [@"" stringByAppendingFormat:@"%@%@%@,%@",self.numberOfSymbols,self.symbol,self.color,self.fillType];
+  return [@"" stringByAppendingFormat:@"%@%@%d,%d",self.numberOfSymbols,self.symbol,self.color,self.fillType];
 }
 
 
