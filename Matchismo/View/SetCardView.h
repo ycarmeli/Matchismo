@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString *symbol;
 @property (nonatomic) int numberOfSymbols;
-@property (strong, nonatomic) UIColor *color;
+@property (nonatomic) int color;
 @property (nonatomic) int fillType;
 @property (nonatomic) BOOL faceUp;
 

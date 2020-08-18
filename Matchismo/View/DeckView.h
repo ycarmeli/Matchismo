@@ -5,7 +5,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GameFrameView : UIView
+@interface DeckView : UIView
 
 @end
 

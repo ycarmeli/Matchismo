@@ -28,7 +28,8 @@
 		9ACAF70724EA99FE0089063B /* PlayingCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF70524EA99FE0089063B /* PlayingCardView.mm */; };
 		9ACAF70A24EA9A0E0089063B /* SetCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF70824EA9A0E0089063B /* SetCardView.mm */; };
 		9ACAF70D24EA9C020089063B /* Grid.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF70C24EA9C020089063B /* Grid.mm */; };
-		9ACAF71024EBBE3A0089063B /* GameFrameView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF70E24EBBE3A0089063B /* GameFrameView.mm */; };
+		9ACAF71024EBBE3A0089063B /* GameBoardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF70E24EBBE3A0089063B /* GameBoardView.mm */; };
+		9ACAF71324EBD2DE0089063B /* DeckView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71124EBD2DE0089063B /* DeckView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,8 +92,10 @@
 		9ACAF70924EA9A0E0089063B /* SetCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetCardView.h; sourceTree = "<group>"; };
 		9ACAF70B24EA9C020089063B /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
 		9ACAF70C24EA9C020089063B /* Grid.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Grid.mm; sourceTree = "<group>"; };
-		9ACAF70E24EBBE3A0089063B /* GameFrameView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFrameView.mm; sourceTree = "<group>"; };
-		9ACAF70F24EBBE3A0089063B /* GameFrameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFrameView.h; sourceTree = "<group>"; };
+		9ACAF70E24EBBE3A0089063B /* GameBoardView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameBoardView.mm; sourceTree = "<group>"; };
+		9ACAF70F24EBBE3A0089063B /* GameBoardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameBoardView.h; sourceTree = "<group>"; };
+		9ACAF71124EBD2DE0089063B /* DeckView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DeckView.mm; sourceTree = "<group>"; };
+		9ACAF71224EBD2DE0089063B /* DeckView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeckView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,12 +185,14 @@
 			children = (
 				9ACAF70B24EA9C020089063B /* Grid.h */,
 				9ACAF70C24EA9C020089063B /* Grid.mm */,
-				9ACAF70524EA99FE0089063B /* PlayingCardView.mm */,
 				9ACAF70624EA99FE0089063B /* PlayingCardView.h */,
-				9ACAF70824EA9A0E0089063B /* SetCardView.mm */,
+				9ACAF70524EA99FE0089063B /* PlayingCardView.mm */,
 				9ACAF70924EA9A0E0089063B /* SetCardView.h */,
-				9ACAF70E24EBBE3A0089063B /* GameFrameView.mm */,
-				9ACAF70F24EBBE3A0089063B /* GameFrameView.h */,
+				9ACAF70824EA9A0E0089063B /* SetCardView.mm */,
+				9ACAF70F24EBBE3A0089063B /* GameBoardView.h */,
+				9ACAF70E24EBBE3A0089063B /* GameBoardView.mm */,
+				9ACAF71224EBD2DE0089063B /* DeckView.h */,
+				9ACAF71124EBD2DE0089063B /* DeckView.mm */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -374,8 +379,9 @@
 				9AA9BF2224D99BFB00EDDF5C /* Deck.m in Sources */,
 				9AA9BEEB24D9791A00EDDF5C /* SceneDelegate.m in Sources */,
 				9AA2940024E14047007CA1A0 /* SetGameViewController.m in Sources */,
+				9ACAF71324EBD2DE0089063B /* DeckView.mm in Sources */,
 				9ACAF70A24EA9A0E0089063B /* SetCardView.mm in Sources */,
-				9ACAF71024EBBE3A0089063B /* GameFrameView.mm in Sources */,
+				9ACAF71024EBBE3A0089063B /* GameBoardView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

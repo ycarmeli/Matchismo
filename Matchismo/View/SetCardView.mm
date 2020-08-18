@@ -7,7 +7,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation SetCardView
 
-- (void)setColor:(UIColor *)color{
+- (void)setColor:(int)color{
   _color = color;
   [self setNeedsDisplay];
 }
@@ -30,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define CORNER_RADIUS 12.0
 #define CORNER_STD_HEIGHT 180.0
 
-static const CGFloat SQUARE_SIZE = 20.0;
-static const CGFloat TRIANGLE_SIZE = 20.0;
+static const CGFloat SQUARE_SIZE = 10.0;
+static const CGFloat TRIANGLE_SIZE = 10.0;
 
 
 - (CGFloat)cornerScaleFactor {
@@ -81,12 +81,21 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
   
 }
 
+- (UIColor *)colorAtIndex:(int)index{
+  switch (index){
+    case 1: return [UIColor greenColor];
+    case 2: return [UIColor purpleColor];
+    case 3: return [UIColor redColor];
+  }
+  return [UIColor blackColor];
+}
+
 #define FILL_SOLID 3
 #define FILL_STRIPES 2
 
 - (void)fillSymbol:(UIBezierPath *)symbol {
   
-
+  UIColor *myColor = [self colorAtIndex:self.color];
 
 
   if (self.fillType == FILL_STRIPES){
@@ -94,11 +103,11 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
   }
   
   if (self.fillType == FILL_SOLID){
-    [self.color setFill];
+    [myColor setFill];
     [symbol fill];
   }
   
-  [self.color setStroke];
+  [myColor setStroke];
   [symbol stroke];
 
 }
@@ -126,7 +135,6 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
   [path addLineToPoint:CGPointMake(topLocation.x + (TRIANGLE_SIZE / 2.0), topLocation.y + (TRIANGLE_SIZE / 2.0)  ) ];
   
   [path addLineToPoint:CGPointMake(topLocation.x ,  topLocation.y +   TRIANGLE_SIZE  ) ];
-
   [path addLineToPoint:CGPointMake(topLocation.x - (TRIANGLE_SIZE / 2.0), topLocation.y + (TRIANGLE_SIZE / 2.0)  )];
 
   [path closePath];
@@ -140,10 +148,7 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
   
   CGRect square = CGRectMake(topLocation.x, topLocation.y, SQUARE_SIZE, SQUARE_SIZE);
   UIBezierPath *path = ([type isEqualToString:@"circle"])? [UIBezierPath bezierPathWithOvalInRect:square]: [UIBezierPath bezierPathWithRect:square];
-  [[UIColor whiteColor] setFill];
-  [path fill];
-  [[UIColor blackColor] setStroke];
-  [path stroke];
+  [self fillSymbol:path];
 }
 
 
@@ -151,9 +156,7 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
 //  CGRect cardRect = CGRectMake(0, 0, 40, 60);
   UIBezierPath *cardShape = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
   [cardShape addClip];
-  [[UIColor blueColor]setFill];
-  [cardShape fill];
-  [[UIColor blackColor] setStroke];
+  [[UIColor blackColor ] setStroke ];
   [cardShape stroke];
   [self drawSymbols];
 }
@@ -165,6 +168,11 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
   
 }
 
+- (NSString *)description{
+  return [NSString stringWithFormat: @"color: %d, fill:%d ,number: %d ,symbol: %@",
+  self.color,self.fillType,self.numberOfSymbols,self.symbol];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
   
   if (self = [super initWithFrame:frame]) {
@@ -173,11 +181,6 @@ static const CGFloat TRIANGLE_SIZE = 20.0;
   return self;
   
 }
-
-- (void)awakeFromNib {
-  [self setup ];
-}
-
 
 @end
 

@@ -631,12 +631,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FWv-Xo-dbA" customClass="GameFrameView">
-                                <rect key="frame" x="20" y="20" width="374" height="520"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FWv-Xo-dbA">
+                                <rect key="frame" x="20" y="20" width="374" height="546"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cfd-33-PLD" customClass="SetCardView">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cfd-33-PLD" customClass="DeckView">
                                 <rect key="frame" x="176" y="574" width="60" height="90"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -651,9 +651,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="SET!" id="vzs-JC-8vR"/>
                     <connections>
-                        <outlet property="gameFrame" destination="FWv-Xo-dbA" id="9rI-Sq-YmY"/>
+                        <outlet property="boardView" destination="FWv-Xo-dbA" id="9rI-Sq-YmY"/>
+                        <outlet property="deckView" destination="cfd-33-PLD" id="kls-Kn-pdq"/>
                         <outlet property="scoreLabel" destination="DoR-Wf-paV" id="Gca-19-UsS"/>
-                        <outlet property="tempCard" destination="cfd-33-PLD" id="kls-Kn-pdq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="doe-nF-uRP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
