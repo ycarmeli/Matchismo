@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet GameBoardView *boardView;
 @property (strong, nonatomic) IBOutlet DeckView *deckView;
 @property (weak, nonatomic) IBOutlet UIView *gameView;
+@property (strong, nonatomic) UIDynamicAnimator *animator;
 @property(strong,nonatomic) Game *game;
 
 @end
@@ -48,32 +49,20 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void) newGame{
   _game = [[Game alloc]initWithCardCount:DECK_SIZE usingDeck:[self createDeck] playingGameType:@"SET!" cardsNumForMatch:3];
+  _animator = [[UIDynamicAnimator alloc]initWithReferenceView:self.gameView];
   _boardView = [[GameBoardView alloc]initWithFrame: [self calculateBoardRect] ];
-  [self.gameView addSubview:_boardView];
-  
-  
   _deckView = [[DeckView alloc]initWithFrame:[self calculateDeckRect] ];
-  [self.gameView addSubview:_deckView];
-  UITapGestureRecognizer *deckTapRecognizer =
-  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(gestureRecognizerDeckTap:) ];
-  deckTapRecognizer.numberOfTapsRequired = 1;
-  deckTapRecognizer.delegate = self;
-  _deckView.userInteractionEnabled = YES;
- 
-
- [self.deckView addGestureRecognizer:deckTapRecognizer];
- //[self.gameView addGestureRecognizer:deckTapRecognizer];
- // [self.boardView addGestureRecognizer:deckTapRecognizer];
-
-
-
-//  deckTapRecognizer.delegate = self;
-
   
+  [self.gameView addSubview:_boardView];
+  [self.gameView addSubview:_deckView];
+  
+  UITapGestureRecognizer *deckTapRecognizer =
+  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(deckTap:) ];
+  [self.deckView addGestureRecognizer:deckTapRecognizer];
 
-//  for (int i = 0 ;i < STARTING_CARDS_NUM; i++) {
-//    [self dealCard];
-//  }
+  [self dealNCards:STARTING_CARDS_NUM];
+  
+  
 }
 
 - (CGRect)calculateBoardRect {
@@ -100,6 +89,14 @@ static const CGFloat CARD_HEIGHT = 60;
 
 }
 
+- (void)dealNCards:(int)N {
+  for (int i = 0; i < N;i++){
+    if ([self getNextCardLocation].x != -1) {
+      [self dealCard];
+    }
+  }
+}
+
 - (void)dealCard {
   
   CGRect frame;
@@ -113,8 +110,13 @@ static const CGFloat CARD_HEIGHT = 60;
   SetCardView *cardView = [self createSetCardView:frame];
 
 
-  [self.boardView addSubview:cardView];
+  
+   UITapGestureRecognizer *cardTapRecognizer =
+      [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(cardTap:) ];
+  [cardView addGestureRecognizer:cardTapRecognizer];
+  
 
+  [self.boardView addSubview:cardView];
 
 }
 
@@ -160,14 +162,15 @@ static const CGFloat CARD_HEIGHT = 60;
 - (SetCardView *) createSetCardView:(CGRect)frame {
   
   SetCardView *cardView = [[SetCardView alloc]initWithFrame:frame];
-  SetCard *card = (SetCard *)[self.game drawCard];
+  int cardIndex = [[self.boardView subviews] count];
+  SetCard *card = (SetCard *)[self.game cardAtIndex:cardIndex];
   
   cardView.color = card.color;
   cardView.symbol = card.symbol;
   cardView.numberOfSymbols = [card.numberOfSymbols intValue];
   cardView.fillType = card.fillType;
+  cardView.index = cardIndex;
   
-  NSLog([cardView description]);
   return cardView;
 }
 
@@ -202,12 +205,76 @@ static const CGFloat CARD_HEIGHT = 60;
   
 }
 
-- (void)gestureRecognizerDeckTap:(UITapGestureRecognizer *)recognizer {
-  NSLog(@"#$#");
-  if ([self getNextCardLocation].x != -1) {
-    [self dealCard];
-  }
+#define CARDS_NUM_ON_DEALING 3
+
+
+- (void)deckTap:(UITapGestureRecognizer *)recognizer {
+  
+  [self dealNCards:CARDS_NUM_ON_DEALING];
+  
 }
+
+- (void)cardTap:(UITapGestureRecognizer *)recognizer {
+  
+  SetCardView *tapedCardView = (SetCardView *) recognizer.view;
+  NSLog([tapedCardView description]);
+  CGPoint tapLocation = [recognizer locationInView:self.boardView];
+  NSLog(@"[%d,%d]",  (int)tapLocation.x,(int)tapLocation.y);
+  
+  SetCardView *temp = [self.game cardAtIndex:tapedCardView.index];
+  NSLog([temp description]);
+  
+  
+  [self.game chooseCardAtIndex:tapedCardView.index];
+  [self updateUI];
+  [tapedCardView tap];
+
+}
+
+- (void)updateUI {
+  
+  for (SetCardView *cardView in [self.boardView subviews]) {
+    
+    SetCard *card = (SetCard *) [self.game cardAtIndex:cardView.index];
+    [cardView setBackgroundColorByChosen:card.chosen];
+    if (card.matched) {
+      [self removeCardView:cardView];
+    }
+  }
+  
+  for (SetCardView *cardView in [self.boardView subviews]) {
+    [self checkAndMoveToBetterLocation:cardView];
+  }
+  
+}
+
+- (void)removeCardView: (SetCardView *)cardView {
+  [cardView removeFromSuperview];
+}
+
+- (void)checkAndMoveToBetterLocation: (SetCardView *)cardView {
+  
+  
+  CGPoint nextCardLocation = [self getNextCardLocation];
+  if ([self isPointBetterThanOtherPoint:cardView.frame.origin otherPoint:nextCardLocation] ) {
+    return;
+  }
+  CGRect frame;
+  frame.size = cardView.frame.size;
+  frame.origin = [self getNextCardLocation];
+  cardView.frame = frame;
+  
+  
+}
+
+- (BOOL)isPointBetterThanOtherPoint:(CGPoint)point1 otherPoint:(CGPoint)point2 {
+  
+  return ( (point1.y < point2.y) ||
+     ( ( point1.x < point2.x) && (point1.y == point2.y) )    ) ;
+}
+
+
+
 
 
 

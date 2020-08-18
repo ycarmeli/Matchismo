@@ -10,13 +10,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame;
 
-
+- (void)tap;
+- (void)setBackgroundColorByChosen:(BOOL)chosen;
 
 @property (strong, nonatomic) NSString *symbol;
 @property (nonatomic) int numberOfSymbols;
 @property (nonatomic) int color;
 @property (nonatomic) int fillType;
 @property (nonatomic) BOOL faceUp;
+@property (nonatomic) int index;
 
 @end
 

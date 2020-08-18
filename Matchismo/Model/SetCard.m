@@ -113,6 +113,11 @@ return [[MatchResult alloc]initWithScore:score withStringsArray:@[@"No Match!"] 
   return [@"" stringByAppendingFormat:@"%@%@%d,%d",self.numberOfSymbols,self.symbol,self.color,self.fillType];
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat: @"color: %d, fill:%d ,number: %@ ,symbol: %@",
+  self.color,self.fillType,self.numberOfSymbols,self.symbol];
+}
+
 
 
 
