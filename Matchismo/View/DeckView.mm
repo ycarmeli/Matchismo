@@ -10,7 +10,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-      self.backgroundColor = [UIColor whiteColor];
+      self.backgroundColor = [UIColor blueColor];
+      
+      
       NSLog(@"$");
     }
     return self;

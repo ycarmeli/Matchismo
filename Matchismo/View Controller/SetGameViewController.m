@@ -25,6 +25,7 @@
 //@property (weak, nonatomic) IBOutlet UILabel *matchResultLabel;
 @property (strong, nonatomic) IBOutlet GameBoardView *boardView;
 @property (strong, nonatomic) IBOutlet DeckView *deckView;
+@property (weak, nonatomic) IBOutlet UIView *gameView;
 @property(strong,nonatomic) Game *game;
 
 @end
@@ -37,6 +38,7 @@ static const CGFloat CARD_HEIGHT = 60;
 #define CARD_SIZE CGSizeMake(CARD_WIDTH, CARD_HEIGHT);
 #define DECK_SIZE 81
 #define STARTING_CARDS_NUM 12
+#define MARGIN_BETWEEN_CARDS 5
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,12 +48,28 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void) newGame{
   _game = [[Game alloc]initWithCardCount:DECK_SIZE usingDeck:[self createDeck] playingGameType:@"SET!" cardsNumForMatch:3];
-//  _boardView = [[GameBoardView alloc]initWithFrame: [self calculateBoardRect] ];
+  _boardView = [[GameBoardView alloc]initWithFrame: [self calculateBoardRect] ];
+  [self.gameView addSubview:_boardView];
   
-  _deckView = [[DeckView alloc]initWithFrame:[self calculateBoardRect] ];
   
-  NSLog(@"%f,%f,  %fX%f",
-        _deckView.frame.origin.x,_deckView.frame.origin.x,_deckView.frame.size.height,_deckView.frame.size.width);
+  _deckView = [[DeckView alloc]initWithFrame:[self calculateDeckRect] ];
+  [self.gameView addSubview:_deckView];
+  UITapGestureRecognizer *deckTapRecognizer =
+  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(gestureRecognizerDeckTap:) ];
+  deckTapRecognizer.numberOfTapsRequired = 1;
+  deckTapRecognizer.delegate = self;
+  _deckView.userInteractionEnabled = YES;
+ 
+
+ [self.deckView addGestureRecognizer:deckTapRecognizer];
+ //[self.gameView addGestureRecognizer:deckTapRecognizer];
+ // [self.boardView addGestureRecognizer:deckTapRecognizer];
+
+
+
+//  deckTapRecognizer.delegate = self;
+
+  
 
 //  for (int i = 0 ;i < STARTING_CARDS_NUM; i++) {
 //    [self dealCard];
@@ -59,12 +77,27 @@ static const CGFloat CARD_HEIGHT = 60;
 }
 
 - (CGRect)calculateBoardRect {
-  CGRect frame;
-  frame.origin = CGPointMake(0, 0);
-  frame.size = CGSizeMake(10, 10);
-  return frame;
-  return CGRectMake(0, 0, 10, 10);
+//  CGRect frame;
+//  frame.origin = CGPointMake(0, 0);
+//  frame.size = CGSizeMake(10, 10);
+//  return frame;
+  return CGRectMake(20, 20, 374, 546);
   //20,20,374,546
+}
+
+- (CGRect)calculateDeckRect {
+  
+  CGRect frame;
+  CGFloat deckOriginX = self.boardView.frame.size.width - CARD_WIDTH;
+  CGFloat deckOriginY = self.boardView.frame.size.height + MARGIN_BETWEEN_CARDS ;
+  deckOriginX += self.boardView.frame.origin.x;
+  deckOriginY += self.boardView.frame.origin.y;
+
+
+  frame.origin = CGPointMake(deckOriginX,deckOriginY);
+  frame.size = CARD_SIZE;
+  return frame;
+
 }
 
 - (void)dealCard {
@@ -81,8 +114,7 @@ static const CGFloat CARD_HEIGHT = 60;
 
 
   [self.boardView addSubview:cardView];
-  
-//  NSLog([NSString stringWithFormat:@" %@ $$$$$ %d",[cardView.color description],cardView.fillType]);
+
 
 }
 
@@ -170,7 +202,8 @@ static const CGFloat CARD_HEIGHT = 60;
   
 }
 
-- (IBAction)deckTap:(id)sender {
+- (void)gestureRecognizerDeckTap:(UITapGestureRecognizer *)recognizer {
+  NSLog(@"#$#");
   if ([self getNextCardLocation].x != -1) {
     [self dealCard];
   }

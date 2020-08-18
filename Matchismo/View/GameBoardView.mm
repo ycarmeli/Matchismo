@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
       _boardGrid.cellAspectRatio = (2/3.0);
       _boardGrid.size = self.frame.size;
       _boardGrid.minimumNumberOfCells = 21;
+      self.backgroundColor = [UIColor whiteColor];
+      
     }
     return self;
 }
