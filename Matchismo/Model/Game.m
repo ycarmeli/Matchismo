@@ -46,7 +46,13 @@
 
 #define MISMATCH_PENALTY -2
 #define MATCH_BONUS 3
-#define COST_TO_CHOOSE -1;
+#define COST_TO_CHOOSE -1
+#define DRAW_CARD_PENALTY -3
+
+
+- (void)drawCardPenalty:(int)drawCount {
+  self.score += (DRAW_CARD_PENALTY * drawCount);
+}
 
 
 - (void) chooseCardAtIndex:(int)cardIndex {
@@ -137,17 +143,17 @@
   return (cardIndex < [self.cards count])? self.cards[cardIndex] : nil;
 }
 
-- (nullable Card *)drawCard {
-  
-  Card *newCard = nil;
-  
-  if ([self.cards count] ) { // if there are cards left in the deck
-    unsigned int index = arc4random() % [self.cards count]; // choose card
-    newCard = self.cards[index];
-    [self.cards removeObjectAtIndex:index];
-  }
-  return newCard;
-  
-}
+//- (nullable Card *)drawCard {
+//  
+//  Card *newCard = nil;
+//  
+//  if ([self.cards count] ) { // if there are cards left in the deck
+//    unsigned int index = arc4random() % [self.cards count]; // choose card
+//    newCard = self.cards[index];
+//    [self.cards removeObjectAtIndex:index];
+//  }
+//  return newCard;
+//  
+//}
 
 @end

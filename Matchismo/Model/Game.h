@@ -28,6 +28,7 @@
 - (void) chooseCardAtIndex:(int)cardIndex;
 - (Card *) cardAtIndex:(int)cardIndex;
 - (Card *)drawCard;
+- (void)drawCardPenalty:(int)drawCount;
 
 @property (strong, nonatomic) NSMutableArray<MatchResult*> *matchResults;
 @property (strong, nonatomic) NSMutableArray<Card *> *cards;
