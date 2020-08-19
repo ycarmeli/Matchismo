@@ -337,21 +337,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DoR-Wf-paV">
-                                <rect key="frame" x="20" y="603" width="95" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rjW-GV-LOU">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yri-SE-uzt">
-                                <rect key="frame" x="20" y="645" width="61" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yri-SE-uzt">
+                                <rect key="frame" x="20" y="647" width="39" height="30"/>
                                 <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Reset">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -361,13 +348,42 @@
                                     <action selector="resetClick:" destination="ZdA-eZ-6d2" eventType="touchUpInside" id="sUS-lc-MJg"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DoR-Wf-paV">
+                                <rect key="frame" x="84" y="651" width="110" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="95" id="d8B-fu-b5v"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="DoR-Wf-paV" firstAttribute="leading" secondItem="Yri-SE-uzt" secondAttribute="trailing" constant="8" id="1oA-Ay-Qj9"/>
+                            <constraint firstItem="DoR-Wf-paV" firstAttribute="firstBaseline" secondItem="Yri-SE-uzt" secondAttribute="firstBaseline" id="67I-QD-dAT"/>
+                            <constraint firstItem="D6c-iX-qhZ" firstAttribute="bottom" secondItem="DoR-Wf-paV" secondAttribute="bottom" constant="15.67" id="Ead-l4-59o"/>
+                            <constraint firstItem="D6c-iX-qhZ" firstAttribute="trailing" secondItem="DoR-Wf-paV" secondAttribute="trailing" constant="235" id="PAx-g0-ZqQ"/>
+                            <constraint firstItem="D6c-iX-qhZ" firstAttribute="leading" secondItem="Yri-SE-uzt" secondAttribute="leading" constant="331" id="R5W-5A-2Pb"/>
+                            <constraint firstItem="DoR-Wf-paV" firstAttribute="top" secondItem="D6c-iX-qhZ" secondAttribute="top" constant="651" id="U7Y-0U-sZB"/>
+                            <constraint firstItem="DoR-Wf-paV" firstAttribute="firstBaseline" secondItem="Yri-SE-uzt" secondAttribute="baseline" id="bxx-uO-GDt"/>
+                            <constraint firstItem="DoR-Wf-paV" firstAttribute="centerY" secondItem="Yri-SE-uzt" secondAttribute="centerY" id="csR-t3-Iaa"/>
+                            <constraint firstItem="Yri-SE-uzt" firstAttribute="leading" secondItem="nFi-i4-HSd" secondAttribute="leadingMargin" id="reE-ac-PVs"/>
+                            <constraint firstItem="Yri-SE-uzt" firstAttribute="bottom" secondItem="D6c-iX-qhZ" secondAttribute="bottom" constant="-10" id="s1X-8N-Xk8"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="D6c-iX-qhZ"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Ead-l4-59o"/>
+                                <exclude reference="PAx-g0-ZqQ"/>
+                                <exclude reference="R5W-5A-2Pb"/>
+                                <exclude reference="U7Y-0U-sZB"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="SET!" id="vzs-JC-8vR"/>
                     <connections>
-                        <outlet property="gameView" destination="rjW-GV-LOU" id="oOk-lf-bE7"/>
+                        <outlet property="resetButton" destination="Yri-SE-uzt" id="OCy-ZQ-HS5"/>
                         <outlet property="scoreLabel" destination="DoR-Wf-paV" id="Gca-19-UsS"/>
                     </connections>
                 </viewController>
