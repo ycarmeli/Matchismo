@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+- (instancetype)init{
+      if (self = [super init]) {
+          self.backgroundColor = [UIColor whiteColor];
+      }
+      return self;
+}
 
 @end
 

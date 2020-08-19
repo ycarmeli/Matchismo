@@ -172,12 +172,7 @@ static const CGFloat TRIANGLE_SIZE = 10.0;
   self.backgroundColor = (chosen)? [UIColor lightGrayColor] : [UIColor whiteColor];
 }
 
-- (void)tap {
-  
-//  self.backgroundColor = [UIColor lightGrayColor];
-  
-  
-}
+
 
 - (NSString *)description {
   return [NSString stringWithFormat: @"color: %d, fill:%d ,number: %d ,symbol: %@",

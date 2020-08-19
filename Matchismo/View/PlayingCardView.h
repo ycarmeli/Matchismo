@@ -1,10 +1,22 @@
-// Copyright (c) 2020 Lightricks. All rights reserved.
-// Created by Yossy Carmeli.
+//
+//  PlayingCardView.h
+//  SuperCard
+//
+//  Created by CS193p Instructor.
+//  Copyright (c) 2013 Stanford University. All rights reserved.
+//
+
 #import <UIKit/UIKit.h>
-NS_ASSUME_NONNULL_BEGIN
 
 @interface PlayingCardView : UIView
 
-@end
+- (void)pinch:(UIPinchGestureRecognizer *)gesture;
+- (void)setBackgroundColorByChosen:(BOOL)chosen;
 
-NS_ASSUME_NONNULL_END
+
+@property (nonatomic) NSUInteger rank;
+@property (strong, nonatomic) NSString *suit;
+@property (nonatomic) BOOL faceUp;
+
+
+@end

@@ -9,6 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GameBoardView : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame;
+- (instancetype)init;
 
 @property (strong, nonatomic) Grid *boardGrid;
 
