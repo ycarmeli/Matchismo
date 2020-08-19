@@ -42,9 +42,9 @@
             filePath = "Matchismo/View Controller/SetGameViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "-isPointFree:"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "-isLocationFree:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,9 +58,9 @@
             filePath = "Matchismo/View Controller/SetGameViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
-            landmarkName = "-getNextCardLocation"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "-getNextCardCenterLocation"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,8 +74,8 @@
             filePath = "Matchismo/View Controller/SetGameViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "-dealCard"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,9 +90,25 @@
             filePath = "Matchismo/View Controller/SetGameViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "-dealCard"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AD7B5F26-5F3F-4AD2-90A7-61685D976BA9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Matchismo/View Controller/SetGameViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "-newGame"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -66,10 +66,6 @@ static const CGFloat CARD_HEIGHT = 60;
   [self.deckView addGestureRecognizer:deckTapRecognizer];
 
   
-  
-
-  DELAY(2.0);
-  
   [self dealNCards:STARTING_CARDS_NUM];
   [self updateUI];
 
@@ -125,10 +121,12 @@ static const CGFloat CARD_HEIGHT = 60;
 
 }
 
+
+
 - (int)dealNCards:(int)cardsNumToDeal {
   int cardsDealt = 0;
   for (int i = 0; i < cardsNumToDeal;i++){
-    if ([self getNextCardLocation].x != -1 && (self.drawCount< [self.game.cards count] )  ) {
+    if ([self getNextCardCenterLocation].x != -1 && (self.drawCount< [self.game.cards count] )  ) { // changed
       cardsDealt++;
       [self dealCard];
     }
@@ -138,10 +136,7 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void)dealCard {
   
-  CGPoint cardLocation = [self getNextCardLocation];
-  if (cardLocation.x == -1) {
-    [self emptyDeckBehavior]; //TODO// NO MORE ROOM FOR CARDS
-  }
+  CGPoint cardLocation = [self getNextCardCenterLocation];
 
   SetCardView *cardView = self.cardViewArray[self.drawCount];
   cardView.index = self.drawCount++;
@@ -168,7 +163,7 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void)animateCardMovementToNewLocation:(SetCardView *)cardView usingLocation:(CGPoint)newLocation{
   
-  CGPoint newCenterLocation = [self getCenterPointFromOrigin:newLocation];
+  CGPoint newCenterLocation = newLocation;//[self getCenterPointFromOrigin:newLocation];
   
 // [ UIView animateWithDuration:CARD_DEAL_ANIMATION_DURATION
 //                        delay:CARD_DEAL_ANIMATION_DURATION
@@ -218,28 +213,44 @@ static const CGFloat CARD_HEIGHT = 60;
 
 #define MARGIN_BETWEEN_CARDS 5
 
-- (CGPoint)getNextCardLocation {
+- (CGPoint)getNextCardCenterLocation {
 
-  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS;
-  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS;
-  for (int y = startXSearchingValue ; y < self.boardView.bounds.size.height; y += (CARD_HEIGHT + MARGIN_BETWEEN_CARDS) ) {
-    for (int x = startYSearchingValue; x < self.boardView.bounds.size.width; x += (CARD_WIDTH + MARGIN_BETWEEN_CARDS) ) {
-      if ([self isPointFree:CGPointMake(x, y)]) {
+  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_WIDTH / 2.0) ;//+ self.boardView.frame.origin.x;
+  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_HEIGHT / 2.0);// + self.boardView.frame.origin.y;
+  for (int y = startYSearchingValue ; y < self.boardView.bounds.size.height; y += (CARD_HEIGHT + MARGIN_BETWEEN_CARDS) ) {
+    for (int x = startXSearchingValue; x < self.boardView.bounds.size.width; x += (CARD_WIDTH + MARGIN_BETWEEN_CARDS) ) {
+      if ([self isLocationFree:CGPointMake(x, y)]) {
         return CGPointMake(x  , y );
       }
     }
   }
-  
+
   return CGPointMake(-1, -1);
-  
+
 }
 
-- (BOOL)isPointFree:(CGPoint)point {
+//- (CGPoint)getNextCardLocation {
+//
+//  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS;
+//  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS;
+//  for (int y = startYSearchingValue ; y < self.boardView.bounds.size.height; y += (CARD_HEIGHT + MARGIN_BETWEEN_CARDS) ) {
+//    for (int x = startXSearchingValue; x < self.boardView.bounds.size.width; x += (CARD_WIDTH + MARGIN_BETWEEN_CARDS) ) {
+//      if ([self isLocationFree:CGPointMake(x, y)]) {
+//        return CGPointMake(x  , y );
+//      }
+//    }
+//  }
+//
+//  return CGPointMake(-1, -1);
+//
+//}
+
+- (BOOL)isLocationFree:(CGPoint)point {
   if ([self isPointOutOfBounds:point]) {
     return NO;
   }
   for (UIView *cardView in [self.boardView subviews]) {
-    if (CGPointEqualToPoint(point, cardView.frame.origin) ) {
+    if (CGPointEqualToPoint(point, cardView.center) ) {
       return NO;
     }
   }
@@ -248,7 +259,8 @@ static const CGFloat CARD_HEIGHT = 60;
 }
 
 - (BOOL) isPointOutOfBounds:(CGPoint)point {
-  return (point.x + CARD_WIDTH >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT >= self.boardView.bounds.size.height);
+
+  return (point.x + CARD_WIDTH/2 >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT/2 >= self.boardView.bounds.size.height);
 }
 
 
@@ -309,52 +321,95 @@ static const CGFloat CARD_HEIGHT = 60;
 
 }
 
-- (void)updateUI {
-  
-  for (SetCardView *cardView in [self.boardView subviews]) {
-    
-    SetCard *card = (SetCard *) [self.game cardAtIndex:cardView.index];
-    [cardView setBackgroundColorByChosen:card.chosen];
-    if (card.matched) {
-      [self removeCardView:cardView];
-    }
-  }
-  
-  for (SetCardView *cardView in [self.boardView subviews]) {
-    [self checkAndMoveToBetterLocation:cardView];
-  }
-  
-  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
-  [self.gameView addSubview:self.deckView];
-  if (self.drawCount == [self.game.cards count]) {
-    [self.deckView removeFromSuperview];
-  }
-  NSLog(@"draws:%d",self.drawCount);
-}
 
-- (void)removeCardView: (SetCardView *)cardView {
+
+
+- (void)removeCardAndAnimate:(SetCardView *)cardView {
+  
+  //TODO ANIMATION OF CARD GET REMOVED
+  CGPoint flyingCardLocation;
+  flyingCardLocation.y = self.boardView.frame.size.height;
+  flyingCardLocation.x = (arc4random() % (int)self.boardView.frame.size.width ) ;
+  //[self animateCardMovementToNewLocation:cardView usingLocation:flyingCardLocation];
+  
+  [UIView animateWithDuration:CARD_DEAL_ANIMATION_DURATION
+                   animations:^{
+    cardView.alpha = 0.0;
+                  }
+                   completion:^(BOOL finished){
+                    if (finished) {
+                   //   [cardView removeFromSuperview];
+                      //TODO- getNextAnimation?
+                    //  [cardView performSelector:@selector(nothing) withObject:nil afterDelay:DELAY_BETWEEN_DEAL];
+                    }
+                  }
+
+   ];
+  
+  
   [cardView removeFromSuperview];
 }
 
-- (void)checkAndMoveToBetterLocation: (SetCardView *)cardView {
+- (void)checkAndRemoveCards{
   
-  
-  CGPoint nextCardLocation = [self getNextCardLocation];
-  if (nextCardLocation.x == -1  || [self isPointBetterThanOtherPoint:cardView.frame.origin otherPoint:nextCardLocation] ) {
-    return;
+  for (SetCardView *cardView in [self.boardView subviews]) {
+    SetCard *card = (SetCard *) [self.game cardAtIndex:cardView.index];
+    [cardView setBackgroundColorByChosen:card.chosen];
+    if (card.matched) {
+      [self removeCardAndAnimate:cardView];
+    }
   }
-  CGRect frame;
-  frame.size = cardView.frame.size;
-  frame.origin = [self getNextCardLocation];
-  cardView.frame = frame;
-  
-  
+
 }
+
+- (void) updateScoreLabel{
+  
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
+
+}
+
+- (void)updateUI {
+  
+  [self checkAndRemoveCards];
+  [self checkAndMoveCardsToBetterLocation];
+  [self updateScoreLabel];
+  
+  if (self.drawCount == [self.game.cards count]) { //TODO- move somewhere else
+    [self.deckView removeFromSuperview];
+  }
+}
+
+- (void)checkAndMoveCardsToBetterLocation{
+  
+  for (int i =0;i <[self.game.cards count];i++) { // check by order of dealing
+    SetCardView *cardView = self.cardViewArray[i];
+    if ([[self.boardView subviews] containsObject:cardView]) {
+      [self checkAndMoveCardToBetterLocation:cardView];
+    }
+  }
+  
+//  for (SetCardView *cardView in [self.boardView subviews]) {
+//    [self checkAndMoveToBetterLocation:cardView];
+//  }
+
+}
+
+- (void)checkAndMoveCardToBetterLocation: (SetCardView *)cardView {
+  
+  CGPoint nextCardLocation = [self getNextCardCenterLocation]; //changed
+
+  if ([self isPointBetterThanOtherPoint:nextCardLocation otherPoint:cardView.center] ) {
+    [self animateCardMovementToNewLocation:cardView usingLocation:nextCardLocation];
+  }
+}
+
+
+
 
 - (BOOL)isPointBetterThanOtherPoint:(CGPoint)point1 otherPoint:(CGPoint)point2 {
   
-  return ( (point1.y < point2.y) ||
-     ( ( point1.x < point2.x) && (point1.y == point2.y) )    ) ;
+  return (point1.x != -1 && ( (point1.y < point2.y) ||
+     ( ( point1.x < point2.x) && (point1.y == point2.y) )    ) ) ;
 }
 
 
