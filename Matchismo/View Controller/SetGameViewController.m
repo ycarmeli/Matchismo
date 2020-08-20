@@ -39,30 +39,33 @@ static const CGFloat CARD_HEIGHT = 60;
 #define CARD_SIZE CGSizeMake(CARD_WIDTH, CARD_HEIGHT);
 #define DECK_SIZE 81
 #define STARTING_CARDS_NUM 12
-#define MARGIN_BETWEEN_CARDS 5
+#define MARGIN_BETWEEN_CARDS 4
 
 //-(void)viewWillLayoutSubviews{
 //  [self newGame];
 //
 //}
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    [self newGame];
-}
+
+#pragma mark -Constraints
 
 - (void)constraintResetButton {
-  
   [self.resetButton.widthAnchor constraintEqualToConstant:70].active = YES;
+  [self.resetButton.leftAnchor constraintEqualToAnchor:self.boardView.leftAnchor].active = YES;
+  [self.resetButton.topAnchor constraintEqualToAnchor:self.boardView.bottomAnchor constant:30].active = YES;
+}
 
+- (void)constraintScoreLabel {
+  
+  [self.scoreLabel.leftAnchor constraintEqualToAnchor:self.resetButton.rightAnchor constant:20].active = YES;
+  [self.scoreLabel.topAnchor constraintEqualToAnchor:self.resetButton.topAnchor constant:5].active = YES;
 }
 
 - (void)constraintBoardView {
   
   self.boardView.translatesAutoresizingMaskIntoConstraints = NO;
   [self.boardView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:20].active = YES;
-  [self.boardView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:20].active = YES;
+  [self.boardView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:5].active = YES;
 
   /* Fixed width */
   NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:self.boardView
@@ -71,7 +74,7 @@ static const CGFloat CARD_HEIGHT = 60;
                                                                         toItem:self.view
                                                                      attribute:NSLayoutAttributeWidth
                                                                     multiplier:1.0
-                                                                      constant:-40];
+                                                                      constant:-10];
   /* Fixed Height */
   NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:self.boardView
                                                                       attribute:NSLayoutAttributeHeight
@@ -95,17 +98,38 @@ static const CGFloat CARD_HEIGHT = 60;
 
 }
 
-
 - (void)constraintAllViews {
   
-  [self constraintResetButton];
   [self constraintBoardView];
-  [self constraintDeckView];
+  [self constraintResetButton];
+  [self constraintScoreLabel];
+  [self constraintDeckView]; //unique
   
 }
 
+#pragma mark -Inits
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+    [self newGame];
+}
+
+
 - (void)orientationChanged:(NSNotification *)notification{
   [self updateUI];
+}
+
+- (void)setSubViews {
+  
+  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+  [self.view addSubview:self.boardView];
+  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+  [self.view addSubview:self.scoreLabel];
+  [self.view addSubview:self.resetButton];
+  [self.view addSubview:self.deckView]; // unique
+
 }
 
 - (void) newGame {
@@ -116,17 +140,8 @@ static const CGFloat CARD_HEIGHT = 60;
   self.deckView = [[DeckView alloc]initWithFrame:CGRectZero ];
   self.drawCount = 0;
 
-  
-  [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+  [self setSubViews];
 
-  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-  [self.view addSubview:self.boardView];
-  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-  [self.view addSubview:self.deckView];
-  [self.view addSubview:self.scoreLabel];
-  [self.view addSubview:self.resetButton];
-  
-  
   [self constraintAllViews];
   self.cardViewArray = [self createCardViewArray];
 

@@ -30,6 +30,7 @@
 		9ACAF71024EBBE3A0089063B /* GameBoardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF70E24EBBE3A0089063B /* GameBoardView.mm */; };
 		9ACAF71324EBD2DE0089063B /* DeckView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71124EBD2DE0089063B /* DeckView.mm */; };
 		9ACAF71624ED73F40089063B /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71524ED73F40089063B /* PlayingCardView.m */; };
+		9ACAF71924EE44B10089063B /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71724EE44B10089063B /* GameViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,8 @@
 		9ACAF71224EBD2DE0089063B /* DeckView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeckView.h; sourceTree = "<group>"; };
 		9ACAF71424ED73F40089063B /* PlayingCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardView.h; sourceTree = "<group>"; };
 		9ACAF71524ED73F40089063B /* PlayingCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardView.m; sourceTree = "<group>"; };
+		9ACAF71724EE44B10089063B /* GameViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewController.mm; sourceTree = "<group>"; };
+		9ACAF71824EE44B10089063B /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +207,8 @@
 				9AA9BEED24D9791A00EDDF5C /* CardMatchingViewController.m */,
 				9AA293FE24E14047007CA1A0 /* SetGameViewController.h */,
 				9AA293FF24E14047007CA1A0 /* SetGameViewController.m */,
+				9ACAF71724EE44B10089063B /* GameViewController.mm */,
+				9ACAF71824EE44B10089063B /* GameViewController.h */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -375,6 +380,7 @@
 				9ACAF71624ED73F40089063B /* PlayingCardView.m in Sources */,
 				9AA9BEE824D9791A00EDDF5C /* AppDelegate.m in Sources */,
 				9AA9BEF924D9791A00EDDF5C /* main.m in Sources */,
+				9ACAF71924EE44B10089063B /* GameViewController.mm in Sources */,
 				9AA2940C24E141B7007CA1A0 /* Game.m in Sources */,
 				9AA9BF2224D99BFB00EDDF5C /* Deck.m in Sources */,
 				9AA9BEEB24D9791A00EDDF5C /* SceneDelegate.m in Sources */,

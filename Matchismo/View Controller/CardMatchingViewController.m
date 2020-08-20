@@ -19,11 +19,7 @@
 @property(weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property(strong, nonatomic) IBOutlet GameBoardView *boardView;
 @property(strong,nonatomic) Game* game;
-@property(strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSArray<PlayingCardView *> *cardViewArray;
-
-@property (strong, nonatomic) UIDynamicAnimator *animator;
-
 
 @end
 
@@ -32,7 +28,7 @@
 static const CGFloat CARD_WIDTH = 40;
 static const CGFloat CARD_HEIGHT = 60;
 #define CARD_SIZE CGSizeMake(CARD_WIDTH, CARD_HEIGHT);
-#define MARGIN_BETWEEN_CARDS 5
+#define MARGIN_BETWEEN_CARDS 4
 #define DECK_SIZE 52
 #define CARD_DEAL_ANIMATION_DURATION 0.5
 #define DELAY_BETWEEN_DEALS 0.5
@@ -40,9 +36,9 @@ static const CGFloat CARD_HEIGHT = 60;
 - (void)viewDidLoad {
   [super viewDidLoad];
   // Do any additional setup after loading the view.
+  [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+  
   [self newGame];
-  _image = [[UIImage alloc]init];
-  _image = [UIImage imageNamed:@"cardBack"];
 }
 
 -(Deck*) createDeck{
@@ -51,13 +47,21 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void)constraintResetButton {
   [self.resetButton.widthAnchor constraintEqualToConstant:70].active = YES;
+  [self.resetButton.leftAnchor constraintEqualToAnchor:self.boardView.leftAnchor].active = YES;
+  [self.resetButton.topAnchor constraintEqualToAnchor:self.boardView.bottomAnchor constant:30].active = YES;
+}
+
+- (void)constraintScoreLabel {
+  
+  [self.scoreLabel.leftAnchor constraintEqualToAnchor:self.resetButton.rightAnchor constant:20].active = YES;
+  [self.scoreLabel.topAnchor constraintEqualToAnchor:self.resetButton.topAnchor constant:5].active = YES;
 }
 
 - (void)constraintBoardView {
   
   self.boardView.translatesAutoresizingMaskIntoConstraints = NO;
   [self.boardView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:20].active = YES;
-  [self.boardView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:20].active = YES;
+  [self.boardView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:5].active = YES;
 
   /* Fixed width */
   NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:self.boardView
@@ -66,7 +70,7 @@ static const CGFloat CARD_HEIGHT = 60;
                                                                         toItem:self.view
                                                                      attribute:NSLayoutAttributeWidth
                                                                     multiplier:1.0
-                                                                      constant:-40];
+                                                                      constant:-10];
   /* Fixed Height */
   NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:self.boardView
                                                                       attribute:NSLayoutAttributeHeight
@@ -81,16 +85,23 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void)constraintAllViews {
   
-  [self constraintResetButton];
   [self constraintBoardView];
-  
+  [self constraintResetButton];
+  [self constraintScoreLabel];
 }
 
-- (void)orientationChanged:(NSNotification *)notification{
+- (void)orientationChanged:(NSNotification *)notification {
   [self updateUI];
 }
 
-
+- (void)setSubViews {
+  
+  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+  [self.view addSubview:self.boardView];
+  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+  [self.view addSubview:self.scoreLabel];
+  [self.view addSubview:self.resetButton];
+}
 
 -(void)newGame {
     
@@ -98,15 +109,8 @@ static const CGFloat CARD_HEIGHT = 60;
     _game = [[Game alloc]initWithCardCount:DECK_SIZE usingDeck:[self createDeck] playingGameType:@"Matching Cards" cardsNumForMatch:3];
   
    self.boardView = [[GameBoardView alloc]init ];
-  
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
-  
-  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-  [self.view addSubview:self.boardView];
-  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-  [self.view addSubview:self.scoreLabel];
-  [self.view addSubview:self.resetButton];
-  
+
+  [self setSubViews];
   [self constraintAllViews];
   self.cardViewArray = [self createCardViewArray];
   
