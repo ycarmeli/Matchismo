@@ -134,13 +134,14 @@ static const CGFloat CARD_HEIGHT = 60;
 #pragma mark -Constraints
 
 - (void)constraintResetButton {
+  self.resetButton.translatesAutoresizingMaskIntoConstraints = NO;
   [self.resetButton.widthAnchor constraintEqualToConstant:70].active = YES;
   [self.resetButton.leftAnchor constraintEqualToAnchor:self.boardView.leftAnchor].active = YES;
   [self.resetButton.topAnchor constraintEqualToAnchor:self.boardView.bottomAnchor constant:30].active = YES;
 }
 
 - (void)constraintScoreLabel {
-  
+  self.scoreLabel.translatesAutoresizingMaskIntoConstraints = NO;
   [self.scoreLabel.leftAnchor constraintEqualToAnchor:self.resetButton.rightAnchor constant:20].active = YES;
   [self.scoreLabel.topAnchor constraintEqualToAnchor:self.resetButton.topAnchor constant:5].active = YES;
 }
@@ -351,7 +352,7 @@ static const CGFloat CARD_HEIGHT = 60;
   return (point.x < 0)||(point.x + CARD_WIDTH/2 >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT/2 >= self.boardView.bounds.size.height);
 }
 
-- (void)resetCardsLocation { 
+- (void)resetCardsLocation {
   
   NSMutableArray<SetCardView *> *tempViewArray = [[NSMutableArray alloc]init ];
   
