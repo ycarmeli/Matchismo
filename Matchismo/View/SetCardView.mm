@@ -162,7 +162,7 @@ static const CGFloat TRIANGLE_SIZE = 10.0;
 }
 
 - (void)setup  {
-  self.backgroundColor = nil;
+  self.backgroundColor = [UIColor whiteColor];
   self.opaque = NO;
   self.contentMode = UIViewContentModeRedraw;
   

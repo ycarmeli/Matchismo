@@ -28,7 +28,7 @@
 @property(strong,nonatomic) Game *game;
 @property (nonatomic) int drawCount;
 @property (strong, nonatomic) NSMutableArray<SetCardView *> *cardViewArray;
-@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property(nonatomic) BOOL isPiled;
 @end
 
 
@@ -39,12 +39,96 @@ static const CGFloat CARD_HEIGHT = 60;
 #define CARD_SIZE CGSizeMake(CARD_WIDTH, CARD_HEIGHT);
 #define DECK_SIZE 81
 #define STARTING_CARDS_NUM 12
+#define CARDS_NUM_ON_DEALING 3
 #define MARGIN_BETWEEN_CARDS 4
+#define CARD_MOVE_ANIMATION_DURATION 0.5
+#define DELAY_BETWEEN_MOVES 0.5
 
-//-(void)viewWillLayoutSubviews{
-//  [self newGame];
-//
-//}
+#pragma mark -Inits
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+  
+    //flip screen recognizer
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+    
+    //pinch screen recognizer
+    UIPinchGestureRecognizer *pinchRecognizer =
+        [[UIPinchGestureRecognizer alloc] initWithTarget: self action:@selector(pinch:) ];
+    [self.view addGestureRecognizer:pinchRecognizer];
+    
+    [self newGame];
+}
+
+
+- (void)orientationChanged:(NSNotification *)notification{
+  [self resetCardsLocation];
+  [self updateUI];
+}
+
+- (void) newGame {
+  
+  self.game = [[Game alloc]initWithCardCount:DECK_SIZE usingDeck:[self createDeck] playingGameType:@"SET!" cardsNumForMatch:3];
+  self.boardView = [[GameBoardView alloc]init ];
+  self.deckView = [[DeckView alloc]initWithFrame:CGRectZero ];
+  self.drawCount = 0;
+  
+  [self setSubViews];
+
+  [self constraintAllViews];
+  [self.deckView layoutIfNeeded];
+  self.cardViewArray = [self createCardViewArray];
+
+  UITapGestureRecognizer *deckTapRecognizer =
+  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(deckTap:) ];
+  [self.deckView addGestureRecognizer:deckTapRecognizer];
+
+  [self.boardView layoutIfNeeded];
+  [self dealNCards:STARTING_CARDS_NUM];
+  [self updateUI];
+
+}
+
+- (void)setSubViews {
+  
+  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+  [self.view addSubview:self.boardView];
+  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+  [self.view addSubview:self.scoreLabel];
+  [self.view addSubview:self.resetButton];
+  [self.view addSubview:self.deckView];
+
+}
+
+-(Deck *)createDeck {
+  return [[SetCardDeck alloc] initWithSymbols:@[@"triangle",@"circle",@"square"] ];
+}
+
+- (NSMutableArray<SetCardView *> *)createCardViewArray {
+
+  NSMutableArray *cardViewArray = [[NSMutableArray alloc]init];
+  CGRect frame;
+  frame.size = CARD_SIZE;
+  frame.origin = self.deckView.bounds.origin;
+  for (SetCard *card in self.game.cards ) {
+    SetCardView *cardView = [self createSetCardViewFromSetCard:card usingFrame: frame];
+
+    [cardViewArray addObject:cardView];
+  }
+  return cardViewArray;
+}
+
+- (SetCardView *) createSetCardViewFromSetCard:(SetCard *)card usingFrame:(CGRect)frame {
+    
+  SetCardView *cardView = [[SetCardView alloc]initWithFrame:frame];
+  cardView.color = card.color;
+  cardView.symbol = card.symbol;
+  cardView.numberOfSymbols = [card.numberOfSymbols intValue];
+  cardView.fillType = card.fillType;
+  
+  return cardView;
+}
 
 
 #pragma mark -Constraints
@@ -103,88 +187,26 @@ static const CGFloat CARD_HEIGHT = 60;
   [self constraintBoardView];
   [self constraintResetButton];
   [self constraintScoreLabel];
-  [self constraintDeckView]; //unique
+  [self constraintDeckView];
   
 }
 
-#pragma mark -Inits
+#pragma mark -Updating
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
-    [self newGame];
+- (void) updateScoreLabel{
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
 }
 
-
-- (void)orientationChanged:(NSNotification *)notification{
-  [self updateUI];
-}
-
-- (void)setSubViews {
+- (void)updateUI {
   
-  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-  [self.view addSubview:self.boardView];
-  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-  [self.view addSubview:self.scoreLabel];
-  [self.view addSubview:self.resetButton];
-  [self.view addSubview:self.deckView]; // unique
-
+  [self checkAndRemoveCards];
+  [self checkAndMoveCardsToBetterLocation];
+  [self updateScoreLabel];
 }
 
-- (void) newGame {
-  
-  self.game = [[Game alloc]initWithCardCount:DECK_SIZE usingDeck:[self createDeck] playingGameType:@"SET!" cardsNumForMatch:3];
-  //_animator = [[UIDynamicAnimator alloc]initWithReferenceView:self.gameView];
-  self.boardView = [[GameBoardView alloc]init ];
-  self.deckView = [[DeckView alloc]initWithFrame:CGRectZero ];
-  self.drawCount = 0;
 
-  [self setSubViews];
 
-  [self constraintAllViews];
-  self.cardViewArray = [self createCardViewArray];
-
-  UITapGestureRecognizer *deckTapRecognizer =
-  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(deckTap:) ];
-  [self.deckView addGestureRecognizer:deckTapRecognizer];
-
-  [self.boardView layoutIfNeeded];
-  [self dealNCards:STARTING_CARDS_NUM];
-  [self updateUI];
-
-  
-  NSLog(@"draw:%d",self.drawCount);
-  NSLog(@"board size: [%f X %f]",self.boardView.frame.size.height,self.boardView.frame.size.width);
-  NSLog(@"board size: [%f X %f]",self.boardView.widthAnchor.accessibilityFrame.size.width ,self.boardView.bounds.size.width);
-
-}
-
-- (NSMutableArray<SetCardView *> *)createCardViewArray {
-
-  NSMutableArray *cardViewArray = [[NSMutableArray alloc]init];
-  CGRect frame;
-  frame.size = CARD_SIZE;
-  frame.origin = self.deckView.bounds.origin;
-  for (SetCard *card in self.game.cards ) {
-    SetCardView *cardView = [self createSetCardViewFromSetCard:card usingFrame: frame];
-
-    [cardViewArray addObject:cardView];
-  }
-  
-  return cardViewArray;
-}
-
-- (SetCardView *) createSetCardViewFromSetCard:(SetCard *)card usingFrame:(CGRect)frame {
-    
-  SetCardView *cardView = [[SetCardView alloc]initWithFrame:frame];
-  cardView.color = card.color;
-  cardView.symbol = card.symbol;
-  cardView.numberOfSymbols = [card.numberOfSymbols intValue];
-  cardView.fillType = card.fillType;
-  
-  return cardView;
-}
+#pragma mark-Dealing
 
 - (BOOL) isOKToDeal:(CGPoint)nextCardCenterLocation {
   return (nextCardCenterLocation.x != -1 && (self.drawCount < [self.game.cards count] ))  ;
@@ -196,13 +218,14 @@ static const CGFloat CARD_HEIGHT = 60;
     CGPoint nextCardCenterLocation = [self getNextCardCenterLocation];
     if ( [self isOKToDeal:nextCardCenterLocation ]  ) {
       cardsDealt++;
-      [self dealCardTo:nextCardCenterLocation dealsLeft:(cardsNumToDeal-i)];
+      [self dealCardTo:nextCardCenterLocation];
     }
   }
   return cardsDealt;
 }
 
-- (void)dealCardTo:(CGPoint)nextCardCenterLocation dealsLeft:(int)dealsLeft {
+- (void)dealCardTo:(CGPoint)nextCardCenterLocation{
+  
 
   SetCardView *cardView = self.cardViewArray[self.drawCount];
   cardView.index = self.drawCount++;
@@ -211,48 +234,90 @@ static const CGFloat CARD_HEIGHT = 60;
       [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(cardTap:) ];
   [cardView addGestureRecognizer:cardTapRecognizer];
   
-
+   UIPanGestureRecognizer *cardPanRecognizer =
+      [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(cardPan:) ];
+  [cardView addGestureRecognizer:cardPanRecognizer];
+  
+  
   [self.boardView addSubview:cardView];
   
   [self animateCardMovementToNewLocation:cardView usingLocation:nextCardCenterLocation];
-
-}
-
-#define CARD_DEAL_ANIMATION_DURATION 0.5
-#define DELAY_BETWEEN_DEALS 0.5
-
-
-- (void)animateCardMovementToNewLocation:(SetCardView *)cardView usingLocation:(CGPoint)newLocation{
-  
-  [UIView animateWithDuration:CARD_DEAL_ANIMATION_DURATION
-                   animations:^{
-                    cardView.center = newLocation;
-                  }
-                   completion:^(BOOL finished){
-                    if (finished) {
-                      //TODO- getNextAnimation?
-                    //  [cardView performSelector:@selector(nothing) withObject:nil afterDelay:DELAY_BETWEEN_DEALS];
-                    }
-                  }
-
-   ];
-}
-
-- (CGPoint)getCenterPointFromOrigin: (CGPoint)originPoint{
-  
-  CGPoint center;
-  center.x = originPoint.x + CARD_WIDTH;
-  center.y = originPoint.y + CARD_HEIGHT;
-  return center;
   
 }
 
+#pragma mark-Gestures
 
+
+- (IBAction)resetClick:(id)sender {
+  [self newGame];
+}
+
+- (void)cardPan:(UITapGestureRecognizer *)gesture {
+  if (!self.isPiled) {
+    return;
+  }
+  CGPoint gestureLocation = [gesture locationInView:self.view];
+  for (SetCardView *cardView in [self.boardView subviews]) {
+    [self animateCardMovementToNewLocation:cardView usingLocation:gestureLocation];
+  }
+}
+
+- (void)deckTap:(UITapGestureRecognizer *)recognizer {
+  
+  int dealCount = [self dealNCards:CARDS_NUM_ON_DEALING];
+  [self.game drawCardPenalty:dealCount];
+  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
+  [self updateUI];
+  if (self.drawCount == [self.game.cards count]) {
+    [self.deckView removeFromSuperview];
+  }
+}
+
+- (void)cardTap:(UITapGestureRecognizer *)recognizer {
+  
+  if (![self isAllowToTap]){
+    [self tapOnPile];
+    return;
+  }
+  
+  SetCardView *tapedCardView = (SetCardView *) recognizer.view;
+  
+  [self.game chooseCardAtIndex:tapedCardView.index];
+  [self updateUI];
+  
+}
+
+- (BOOL) isAllowToTap{
+  
+  return !(self.isPiled);
+}
+
+- (void)tapOnPile{
+  self.isPiled = NO;
+  [self resetCardsLocation];
+  [self updateUI];
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gesture {
+  self.isPiled = YES;
+  if ((gesture.state == UIGestureRecognizerStateChanged) ||
+      (gesture.state == UIGestureRecognizerStateEnded)) {
+    for (SetCardView *cardView in [self.boardView subviews]) {
+      [self animateCardMovementToNewLocation:cardView
+                               usingLocation:[self getLocationOfCardCloserToLocation:cardView location:[self centerOfScreen] scale:gesture.scale ]];
+    }
+    gesture.scale = 1.0;
+  }
+  
+}
+
+
+#pragma mark -Locations
 
 - (CGPoint)getNextCardCenterLocation {
 
-  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_WIDTH / 2.0) ;//+ self.boardView.frame.origin.x;
-  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_HEIGHT / 2.0);// + self.boardView.frame.origin.y;
+  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_WIDTH / 2.0) ;
+  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_HEIGHT / 2.0);
 
   CGFloat boardYLimit = self.boardView.frame.size.height;
   CGFloat boardXLimit = self.boardView.frame.size.width;
@@ -269,27 +334,11 @@ static const CGFloat CARD_HEIGHT = 60;
 
 }
 
-//- (CGPoint)getNextCardLocation {
-//
-//  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS;
-//  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS;
-//  for (int y = startYSearchingValue ; y < self.boardView.bounds.size.height; y += (CARD_HEIGHT + MARGIN_BETWEEN_CARDS) ) {
-//    for (int x = startXSearchingValue; x < self.boardView.bounds.size.width; x += (CARD_WIDTH + MARGIN_BETWEEN_CARDS) ) {
-//      if ([self isLocationFree:CGPointMake(x, y)]) {
-//        return CGPointMake(x  , y );
-//      }
-//    }
-//  }
-//
-//  return CGPointMake(-1, -1);
-//
-//}
-
 - (BOOL)isLocationFree:(CGPoint)point {
-  if ([self isPointOutOfBounds:point]) {
+  if ([self isLocationOutOfBounds:point]) {
     return NO;
   }
-  for (UIView *cardView in [self.boardView subviews]) {
+  for (SetCardView *cardView in [self.boardView subviews]) {
     if (CGPointEqualToPoint(point, cardView.center) ) {
       return NO;
     }
@@ -298,105 +347,22 @@ static const CGFloat CARD_HEIGHT = 60;
   
 }
 
-- (BOOL) isPointOutOfBounds:(CGPoint)point {
-  return (point.x + CARD_WIDTH/2 >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT/2 >= self.boardView.bounds.size.height);
+- (BOOL) isLocationOutOfBounds:(CGPoint)point {
+  return (point.x < 0)||(point.x + CARD_WIDTH/2 >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT/2 >= self.boardView.bounds.size.height);
 }
 
-
-- (UIColor *)colorAtIndex:(int)index{
-  switch (index){
-    case 1: return [UIColor greenColor];
-    case 2: return [UIColor purpleColor];
-    case 3: return [UIColor redColor];
-  }
-  return [UIColor blackColor];
-}
-
-- (UIColor *)cardToColor:(SetCard *)card {
-  return [self colorAtIndex:card.color];
-}
-
-
-- (IBAction)resetClick:(id)sender {
-  [self newGame];
+- (void)resetCardsLocation { 
   
-}
-
--(Deck *)createDeck {
-  return [[SetCardDeck alloc] initWithSymbols:@[@"triangle",@"circle",@"square"] ];
-}
-
-#define CARDS_NUM_ON_DEALING 3
-
-- (void)deckTap:(UITapGestureRecognizer *)recognizer {
-  
-  int dealCount = [self dealNCards:CARDS_NUM_ON_DEALING];
-  [self.game drawCardPenalty:dealCount];
-  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
-  [self updateUI];
-  if (self.drawCount == [self.game.cards count]) {
-    [self.deckView removeFromSuperview];
-  }
-}
-
-- (void)cardTap:(UITapGestureRecognizer *)recognizer {
-  
-  SetCardView *tapedCardView = (SetCardView *) recognizer.view;
-  
-  [self.game chooseCardAtIndex:tapedCardView.index];
-  [self updateUI];
-
-}
-
-- (void)removeCardAndAnimate:(SetCardView *)cardView {
-  
-  //TODO ANIMATION OF CARD GET REMOVED
-  CGPoint flyingCardLocation;
-  flyingCardLocation.y = self.boardView.frame.size.height;
-  flyingCardLocation.x = (arc4random() % (int)self.boardView.frame.size.width ) ;
-  //[self animateCardMovementToNewLocation:cardView usingLocation:flyingCardLocation];
-  
-  [UIView animateWithDuration:CARD_DEAL_ANIMATION_DURATION
-                   animations:^{
-    cardView.alpha = 0.0;
-                  }
-                   completion:^(BOOL finished){
-                    if (finished) {
-                   //   [cardView removeFromSuperview];
-                      //TODO- getNextAnimation?
-                    //  [cardView performSelector:@selector(nothing) withObject:nil afterDelay:DELAY_BETWEEN_DEAL];
-                    }
-                  }
-
-   ];
-  
-  
-  [cardView removeFromSuperview];
-}
-
-- (void)checkAndRemoveCards{
+  NSMutableArray<SetCardView *> *tempViewArray = [[NSMutableArray alloc]init ];
   
   for (SetCardView *cardView in [self.boardView subviews]) {
-    SetCard *card = (SetCard *) [self.game cardAtIndex:cardView.index];
-    [cardView setBackgroundColorByChosen:card.chosen];
-    if (card.matched) {
-      [self removeCardAndAnimate:cardView];
-    }
+    [tempViewArray addObject:cardView];
+    [cardView removeFromSuperview];
   }
-
-}
-
-- (void) updateScoreLabel{
-  
-  self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
-
-}
-
-- (void)updateUI {
-  
-  [self checkAndRemoveCards];
-  [self checkAndMoveCardsToBetterLocation];
-  [self updateScoreLabel];
+  for (SetCardView *cardView in tempViewArray) {
+    cardView.center = CGPointMake(-CARD_WIDTH ,-CARD_HEIGHT);
+    [self.boardView addSubview:cardView];
+  }
   
 }
 
@@ -408,12 +374,11 @@ static const CGFloat CARD_HEIGHT = 60;
       [self checkAndMoveCardToBetterLocation:cardView];
     }
   }
-
 }
 
 - (void)checkAndMoveCardToBetterLocation: (SetCardView *)cardView {
   
-  CGPoint nextCardLocation = [self getNextCardCenterLocation]; //changed
+  CGPoint nextCardLocation = [self getNextCardCenterLocation];
 
   if ([self isNewLocationBetterThanCurrentLocation:nextCardLocation currentLocation:cardView.center] ) {
     [self animateCardMovementToNewLocation:cardView usingLocation:nextCardLocation];
@@ -423,7 +388,7 @@ static const CGFloat CARD_HEIGHT = 60;
 - (BOOL)isNewLocationBetterThanCurrentLocation:(CGPoint)locationToCheckIfBetter currentLocation:(CGPoint)currentLocation {
   
   return ( [self isValidLocation:locationToCheckIfBetter] &&
-          ( [self isPointOutOfBounds:currentLocation] || [self isNewLocationBeforeThanCurrentLocation:locationToCheckIfBetter currentLocation:currentLocation ] )) ;
+          ( [self isLocationOutOfBounds:currentLocation] || [self isNewLocationBeforeThanCurrentLocation:locationToCheckIfBetter currentLocation:currentLocation ] )) ;
 }
 
 -(BOOL)isNewLocationBeforeThanCurrentLocation:(CGPoint)locationToCheckIfBefore currentLocation:(CGPoint)currentLocation {
@@ -434,6 +399,60 @@ static const CGFloat CARD_HEIGHT = 60;
 - (BOOL)isValidLocation:(CGPoint)location{
   return (location.x != -1);
 }
+
+
+- (CGPoint)centerOfScreen {
+  return self.view.center;
+}
+
+- (CGPoint) getLocationOfCardCloserToLocation:(SetCardView *)cardView location:(CGPoint)location scale:(CGFloat)scale {
+  
+  CGPoint currentLocation = cardView.center;
+  CGPoint centerOfScreen = [self centerOfScreen];
+  CGFloat xDistance  =  (currentLocation.x - centerOfScreen.x) * scale;
+  CGFloat yDistance  =  (currentLocation.y - centerOfScreen.y) * scale;
+  
+  CGPoint newLocation = CGPointMake(centerOfScreen.x + xDistance, centerOfScreen.y + yDistance) ;
+  
+  return newLocation ;
+}
+
+- (void) viewWillLayoutSubviews {
+  [self updateUI];
+}
+
+- (void)checkAndRemoveCards{
+  
+  for (SetCardView *cardView in [self.boardView subviews]) {
+    SetCard *card = (SetCard *) [self.game cardAtIndex:cardView.index];
+    [cardView setBackgroundColorByChosen:card.chosen];
+    if (card.matched) {
+      [self removeCardAndAnimate:cardView];
+    }
+  }
+  
+}
+
+#pragma mark -Animation
+
+
+- (void)animateCardMovementToNewLocation:(SetCardView *)cardView usingLocation:(CGPoint)newLocation  {
+
+  [UIView animateWithDuration:CARD_MOVE_ANIMATION_DURATION
+                   animations:^{cardView.center = newLocation;}
+                   completion:nil
+   ];
+}
+
+- (void)removeCardAndAnimate:(SetCardView *)cardView {
+  
+  CGPoint flyingCardLocation;
+  flyingCardLocation.y = 0;
+  flyingCardLocation.x = (arc4random() % (int)self.boardView.frame.size.width ) ;
+  [self animateCardMovementToNewLocation:cardView usingLocation:flyingCardLocation];
+  [cardView removeFromSuperview];
+}
+
 
 
 

@@ -10,12 +10,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-      self.backgroundColor = [UIColor blueColor];
+      self.backgroundColor = nil;
       
-      
-      NSLog(@"$");
     }
     return self;
+}
+
+- (void)drawRect:(CGRect)rect{
+  
+  [[UIImage imageNamed:@"cardBack"] drawInRect:self.bounds];
 }
 
 @end
