@@ -15,11 +15,11 @@
 @class HistoryViewController;
 
 @interface CardMatchingViewController ()
-@property (weak, nonatomic) IBOutlet UIButton *resetButton;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (strong, nonatomic) IBOutlet GameBoardView *boardView;
-@property (strong,nonatomic) Game* game;
-
+@property(weak, nonatomic) IBOutlet UIButton *resetButton;
+@property(weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property(strong, nonatomic) IBOutlet GameBoardView *boardView;
+@property(strong,nonatomic) Game* game;
+@property(strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSArray<PlayingCardView *> *cardViewArray;
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
@@ -41,6 +41,8 @@ static const CGFloat CARD_HEIGHT = 60;
   [super viewDidLoad];
   // Do any additional setup after loading the view.
   [self newGame];
+  _image = [[UIImage alloc]init];
+  _image = [UIImage imageNamed:@"cardBack"];
 }
 
 -(Deck*) createDeck{
@@ -99,7 +101,9 @@ static const CGFloat CARD_HEIGHT = 60;
   
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
   
+  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
   [self.view addSubview:self.boardView];
+  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
   [self.view addSubview:self.scoreLabel];
   [self.view addSubview:self.resetButton];
   

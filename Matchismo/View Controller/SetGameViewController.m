@@ -119,7 +119,9 @@ static const CGFloat CARD_HEIGHT = 60;
   
   [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 
+  [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
   [self.view addSubview:self.boardView];
+  [self.boardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
   [self.view addSubview:self.deckView];
   [self.view addSubview:self.scoreLabel];
   [self.view addSubview:self.resetButton];
@@ -179,13 +181,13 @@ static const CGFloat CARD_HEIGHT = 60;
     CGPoint nextCardCenterLocation = [self getNextCardCenterLocation];
     if ( [self isOKToDeal:nextCardCenterLocation ]  ) {
       cardsDealt++;
-      [self dealCardTo:nextCardCenterLocation];
+      [self dealCardTo:nextCardCenterLocation dealsLeft:(cardsNumToDeal-i)];
     }
   }
   return cardsDealt;
 }
 
-- (void)dealCardTo:(CGPoint)nextCardCenterLocation {
+- (void)dealCardTo:(CGPoint)nextCardCenterLocation dealsLeft:(int)dealsLeft {
 
   SetCardView *cardView = self.cardViewArray[self.drawCount];
   cardView.index = self.drawCount++;
