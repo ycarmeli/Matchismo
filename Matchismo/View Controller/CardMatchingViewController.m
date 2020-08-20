@@ -41,6 +41,10 @@ static const CGFloat CARD_HEIGHT = 60;
   [self newGame];
 }
 
+- (void)awakeFromNib {
+  [self updateUI];
+}
+
 -(Deck*) createDeck{
     return [[PlayingCardDeck alloc]init];
 }
@@ -183,6 +187,7 @@ static const CGFloat CARD_HEIGHT = 60;
 - (void)dealCardITo:(CGPoint)nextCardCenterLocation usingIndex:(int)index {
 
   PlayingCardView *cardView = self.cardViewArray[index];
+  cardView.index = index;
   
    UITapGestureRecognizer *cardTapRecognizer =
       [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(cardTap:) ];
@@ -212,7 +217,7 @@ static const CGFloat CARD_HEIGHT = 60;
     
     
     
-    [self.game chooseCardAtIndex:[self.cardViewArray indexOfObject:tapedCardView]];
+    [self.game chooseCardAtIndex:(int)[self.cardViewArray indexOfObject:tapedCardView]];
     [self updateUI];
   }
 }
@@ -347,7 +352,7 @@ static const CGFloat CARD_HEIGHT = 60;
 - (void)checkAndRemoveCards{
   
   for (PlayingCardView *cardView in [self.boardView subviews]) {
-    PlayingCard *card = (PlayingCard *) [self.game cardAtIndex:[self.cardViewArray indexOfObject:cardView]];
+    PlayingCard *card = (PlayingCard *) [self.game cardAtIndex:(int)[self.cardViewArray indexOfObject:cardView]];
     cardView.faceUp = card.chosen;
     [cardView setBackgroundColorByChosen:card.chosen];
     if (card.matched) {

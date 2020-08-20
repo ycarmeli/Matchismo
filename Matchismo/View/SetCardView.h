@@ -2,11 +2,11 @@
 // Created by Yossy Carmeli.
 
 #import <UIKit/UIKit.h>
-
+#import "CardView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SetCardView : UIView
+@interface SetCardView : CardView
 
 - (instancetype)initWithFrame:(CGRect)frame;
 
@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int color;
 @property (nonatomic) int fillType;
 @property (nonatomic) BOOL faceUp;
-@property (nonatomic) int index;
 
 @end
 

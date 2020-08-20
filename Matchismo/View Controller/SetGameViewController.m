@@ -248,7 +248,6 @@ static const CGFloat CARD_HEIGHT = 60;
 }
 
 
-#define MARGIN_BETWEEN_CARDS 5
 
 - (CGPoint)getNextCardCenterLocation {
 
@@ -335,6 +334,9 @@ static const CGFloat CARD_HEIGHT = 60;
   [self.game drawCardPenalty:dealCount];
   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
   [self updateUI];
+  if (self.drawCount == [self.game.cards count]) {
+    [self.deckView removeFromSuperview];
+  }
 }
 
 - (void)cardTap:(UITapGestureRecognizer *)recognizer {
@@ -396,9 +398,6 @@ static const CGFloat CARD_HEIGHT = 60;
   [self checkAndMoveCardsToBetterLocation];
   [self updateScoreLabel];
   
-  if (self.drawCount == [self.game.cards count]) { //TODO- move somewhere else
-    [self.deckView removeFromSuperview];
-  }
 }
 
 - (void)checkAndMoveCardsToBetterLocation {

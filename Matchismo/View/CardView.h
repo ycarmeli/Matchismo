@@ -5,7 +5,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GameViewController : UIViewController
+@interface CardView : UIView
+
+- (void)setBackgroundColorByChosen:(BOOL)chosen;
+
+@property (nonatomic) int index;
 
 @end
 

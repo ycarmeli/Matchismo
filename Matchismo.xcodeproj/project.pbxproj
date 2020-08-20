@@ -31,6 +31,7 @@
 		9ACAF71324EBD2DE0089063B /* DeckView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71124EBD2DE0089063B /* DeckView.mm */; };
 		9ACAF71624ED73F40089063B /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71524ED73F40089063B /* PlayingCardView.m */; };
 		9ACAF71924EE44B10089063B /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71724EE44B10089063B /* GameViewController.mm */; };
+		9ACAF71C24EE4FDF0089063B /* CardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9ACAF71A24EE4FDF0089063B /* CardView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,8 @@
 		9ACAF71524ED73F40089063B /* PlayingCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardView.m; sourceTree = "<group>"; };
 		9ACAF71724EE44B10089063B /* GameViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewController.mm; sourceTree = "<group>"; };
 		9ACAF71824EE44B10089063B /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		9ACAF71A24EE4FDF0089063B /* CardView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CardView.mm; sourceTree = "<group>"; };
+		9ACAF71B24EE4FDF0089063B /* CardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CardView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +199,8 @@
 				9ACAF70E24EBBE3A0089063B /* GameBoardView.mm */,
 				9ACAF71224EBD2DE0089063B /* DeckView.h */,
 				9ACAF71124EBD2DE0089063B /* DeckView.mm */,
+				9ACAF71A24EE4FDF0089063B /* CardView.mm */,
+				9ACAF71B24EE4FDF0089063B /* CardView.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -385,6 +390,7 @@
 				9AA9BF2224D99BFB00EDDF5C /* Deck.m in Sources */,
 				9AA9BEEB24D9791A00EDDF5C /* SceneDelegate.m in Sources */,
 				9AA2940024E14047007CA1A0 /* SetGameViewController.m in Sources */,
+				9ACAF71C24EE4FDF0089063B /* CardView.mm in Sources */,
 				9ACAF71324EBD2DE0089063B /* DeckView.mm in Sources */,
 				9ACAF70A24EA9A0E0089063B /* SetCardView.mm in Sources */,
 				9ACAF71024EBBE3A0089063B /* GameBoardView.mm in Sources */,

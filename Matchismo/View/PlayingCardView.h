@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CardView.h"
 
-@interface PlayingCardView : UIView
+@interface PlayingCardView : CardView
 
 - (void)pinch:(UIPinchGestureRecognizer *)gesture;
 - (void)setBackgroundColorByChosen:(BOOL)chosen;
