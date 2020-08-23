@@ -67,7 +67,7 @@ static const CGFloat CARD_HEIGHT = 60;
   self.cardViewArray = [self createCardViewArray];
   
   
-  [self.boardView layoutIfNeeded];
+  [self.view layoutIfNeeded];
   [self dealNCards:DECK_SIZE];
   
   [self updateUI];
@@ -120,10 +120,11 @@ static const CGFloat CARD_HEIGHT = 60;
   [self.resetButton.widthAnchor constraintEqualToConstant:70].active = YES;
   [self.resetButton.leftAnchor constraintEqualToAnchor:self.boardView.leftAnchor].active = YES;
   [self.resetButton.topAnchor constraintEqualToAnchor:self.boardView.bottomAnchor constant:30].active = YES;
+  
 }
 
 - (void)constraintScoreLabel {
-  //self.scoreLabel.translatesAutoresizingMaskIntoConstraints = NO;
+  self.scoreLabel.translatesAutoresizingMaskIntoConstraints = NO;
   [self.scoreLabel.leftAnchor constraintEqualToAnchor:self.resetButton.rightAnchor constant:20].active = YES;
   [self.scoreLabel.topAnchor constraintEqualToAnchor:self.resetButton.topAnchor constant:5].active = YES;
 }

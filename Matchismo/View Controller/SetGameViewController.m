@@ -69,6 +69,7 @@ static const CGFloat CARD_HEIGHT = 60;
 
 - (void) newGame {
   
+  self.isPiled = NO;
   self.game = [[Game alloc]initWithCardCount:DECK_SIZE usingDeck:[self createDeck] playingGameType:@"SET!" cardsNumForMatch:3];
   self.boardView = [[GameBoardView alloc]init ];
   self.deckView = [[DeckView alloc]initWithFrame:CGRectZero ];
@@ -80,10 +81,6 @@ static const CGFloat CARD_HEIGHT = 60;
   [self.view layoutIfNeeded];
   self.cardViewArray = [self createCardViewArray];
   
-  UITapGestureRecognizer *deckTapRecognizer =
-  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(deckTap:) ];
-  [self.deckView addGestureRecognizer:deckTapRecognizer];
-
   [self.boardView layoutIfNeeded];
   
 
@@ -104,6 +101,9 @@ static const CGFloat CARD_HEIGHT = 60;
   [self.view addSubview:self.scoreLabel];
   [self.view addSubview:self.resetButton];
   [self.view addSubview:self.deckView];
+  UITapGestureRecognizer *deckTapRecognizer =
+  [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(deckTap:) ];
+  [self.deckView addGestureRecognizer:deckTapRecognizer];
 
 }
 
