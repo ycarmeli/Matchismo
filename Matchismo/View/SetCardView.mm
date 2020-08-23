@@ -27,6 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
   [self setNeedsDisplay];
 }
 
+- (void)setFaceUp:(BOOL)faceUp {
+  _faceUp = faceUp;
+  [self setNeedsDisplay];
+}
+
 #define CORNER_RADIUS 12.0
 #define CORNER_STD_HEIGHT 180.0
 
@@ -153,26 +158,22 @@ static const CGFloat TRIANGLE_SIZE = 10.0;
 
 
 - (void)drawRect:(CGRect)rect{
-//  CGRect cardRect = CGRectMake(0, 0, 40, 60);
   UIBezierPath *cardShape = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
   [cardShape addClip];
   [[UIColor blackColor ] setStroke ];
   [cardShape stroke];
+  (self.faceUp)? [[UIColor lightGrayColor]setFill] : [[UIColor whiteColor]setFill];
+  [cardShape fill];
   [self drawSymbols];
 }
 
 - (void)setup  {
-  self.backgroundColor = [UIColor whiteColor];
+  self.backgroundColor = nil;
   self.opaque = NO;
   self.contentMode = UIViewContentModeRedraw;
+  self.faceUp = NO;
   
 }
-
-- (void)setBackgroundColorByChosen:(BOOL)chosen{
-  self.backgroundColor = (chosen)? [UIColor lightGrayColor] : [UIColor whiteColor];
-}
-
-
 
 - (NSString *)description {
   return [NSString stringWithFormat: @"color: %d, fill:%d ,number: %d ,symbol: %@",

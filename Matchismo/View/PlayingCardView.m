@@ -75,40 +75,36 @@
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
 - (CGFloat)cornerOffset { return [self cornerRadius] / 3.0; }
 
-- (void)setBackgroundColorByChosen:(BOOL)chosen{
-  self.backgroundColor = (chosen)? [UIColor lightGrayColor] : [UIColor whiteColor];
-}
-
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
-    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
-    
-    [roundedRect addClip];
-    
-    [[UIColor whiteColor] setFill];
-    UIRectFill(self.bounds);
-    
-    [[UIColor blackColor] setStroke];
-    [roundedRect stroke];
-    
-    if (self.faceUp) {
-        UIImage *faceImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit]];
-        if (faceImage) {
-            CGRect imageRect = CGRectInset(self.bounds,
-                                           self.bounds.size.width * (1.0-self.faceCardScaleFactor),
-                                           self.bounds.size.height * (1.0-self.faceCardScaleFactor));
-            [faceImage drawInRect:imageRect];
-        } else {
-            [self drawPips];
-        }
-        
-        [self drawCorners];
-    } else {
-        [[UIImage imageNamed:@"cardBack"] drawInRect:self.bounds];
-    }
+  UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
+  
+  [roundedRect addClip];
+  
+  [[UIColor whiteColor]setFill];
+  [roundedRect fill];
+  
+  [[UIColor blackColor] setStroke];
+  [roundedRect stroke];
+  
+  if (self.faceUp) {
+      UIImage *faceImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit]];
+      if (faceImage) {
+          CGRect imageRect = CGRectInset(self.bounds,
+                                         self.bounds.size.width * (1.0-self.faceCardScaleFactor),
+                                         self.bounds.size.height * (1.0-self.faceCardScaleFactor));
+          [faceImage drawInRect:imageRect];
+      } else {
+          [self drawPips];
+      }
+      
+      [self drawCorners];
+  } else {
+      [[UIImage imageNamed:@"cardBack"] drawInRect:self.bounds];
+  }
 }
 
 - (void)pushContextAndRotateUpsideDown
@@ -229,9 +225,9 @@
 
 - (void)setup
 {
-    self.backgroundColor = nil;
-    self.opaque = NO;
-    self.contentMode = UIViewContentModeRedraw;
+  self.backgroundColor = [UIColor clearColor];
+  self.opaque = NO;
+  self.contentMode = UIViewContentModeRedraw;
 }
 
 //- (void)awakeFromNib

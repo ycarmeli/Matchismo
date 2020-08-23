@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawRect:(CGRect)rect{
   
   [[UIImage imageNamed:@"cardBack"] drawInRect:self.bounds];
+  [[UIColor whiteColor] setFill];
 }
 
 @end

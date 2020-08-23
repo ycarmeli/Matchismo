@@ -12,7 +12,6 @@
 @interface PlayingCardView : CardView
 
 - (void)pinch:(UIPinchGestureRecognizer *)gesture;
-- (void)setBackgroundColorByChosen:(BOOL)chosen;
 
 
 @property (nonatomic) NSUInteger rank;

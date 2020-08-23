@@ -63,7 +63,7 @@ static const CGFloat CARD_HEIGHT = 60;
 
 
 - (void)orientationChanged:(NSNotification *)notification{
-  [self resetCardsLocation];
+  [self resetCardsLocationTo:CGPointMake(-CARD_WIDTH ,-CARD_HEIGHT)];
   [self updateUI];
 }
 
@@ -78,6 +78,7 @@ static const CGFloat CARD_HEIGHT = 60;
 
   [self constraintAllViews];
   [self.deckView layoutIfNeeded];
+  
   self.cardViewArray = [self createCardViewArray];
 
   UITapGestureRecognizer *deckTapRecognizer =
@@ -106,11 +107,12 @@ static const CGFloat CARD_HEIGHT = 60;
 }
 
 - (NSMutableArray<SetCardView *> *)createCardViewArray {
-
+  [self.deckView layoutIfNeeded];
   NSMutableArray *cardViewArray = [[NSMutableArray alloc]init];
   CGRect frame;
   frame.size = CARD_SIZE;
-  frame.origin = self.deckView.bounds.origin;
+  frame.origin = [self.deckView convertPoint:self.deckView.bounds.origin toView:self.view];
+
   for (SetCard *card in self.game.cards ) {
     SetCardView *cardView = [self createSetCardViewFromSetCard:card usingFrame: frame];
 
@@ -277,7 +279,7 @@ static const CGFloat CARD_HEIGHT = 60;
 - (void)cardTap:(UITapGestureRecognizer *)recognizer {
   
   if (![self isAllowToTap]){
-    [self tapOnPile];
+    [self tapOnPile:[recognizer locationInView:self.view]];
     return;
   }
   
@@ -293,9 +295,9 @@ static const CGFloat CARD_HEIGHT = 60;
   return !(self.isPiled);
 }
 
-- (void)tapOnPile{
+- (void)tapOnPile:(CGPoint)location{
   self.isPiled = NO;
-  [self resetCardsLocation];
+  [self resetCardsLocationTo:location];
   [self updateUI];
 }
 
@@ -305,7 +307,7 @@ static const CGFloat CARD_HEIGHT = 60;
       (gesture.state == UIGestureRecognizerStateEnded)) {
     for (SetCardView *cardView in [self.boardView subviews]) {
       [self animateCardMovementToNewLocation:cardView
-                               usingLocation:[self getLocationOfCardCloserToLocation:cardView location:[self centerOfScreen] scale:gesture.scale ]];
+                               usingLocation:[self centerOfScreen]];
     }
     gesture.scale = 1.0;
   }
@@ -349,10 +351,29 @@ static const CGFloat CARD_HEIGHT = 60;
 }
 
 - (BOOL) isLocationOutOfBounds:(CGPoint)point {
-  return (point.x < 0)||(point.x + CARD_WIDTH/2 >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT/2 >= self.boardView.bounds.size.height);
+  return (![self isLocationInGrid:point]) || (point.x < 0) || (point.x + CARD_WIDTH/2 >= self.boardView.bounds.size.width || point.y + CARD_HEIGHT/2 >= self.boardView.bounds.size.height);
 }
 
-- (void)resetCardsLocation {
+- (BOOL) isLocationInGrid:(CGPoint)point {
+ 
+  CGFloat startXSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_WIDTH / 2.0) ;
+  CGFloat startYSearchingValue =  MARGIN_BETWEEN_CARDS + (CARD_HEIGHT / 2.0);
+
+  CGFloat boardYLimit = self.boardView.frame.size.height;
+  CGFloat boardXLimit = self.boardView.frame.size.width;
+  
+  for (int y = startYSearchingValue ; y < boardYLimit; y += (CARD_HEIGHT + MARGIN_BETWEEN_CARDS) ) {
+    for (int x = startXSearchingValue; x < boardXLimit; x += (CARD_WIDTH + MARGIN_BETWEEN_CARDS) ) {
+      if (CGPointEqualToPoint(point, CGPointMake(x, y))) {
+        return YES;
+      }
+    }
+  }
+  
+  return NO;
+}
+
+- (void)resetCardsLocationTo:(CGPoint)location {
   
   NSMutableArray<SetCardView *> *tempViewArray = [[NSMutableArray alloc]init ];
   
@@ -361,7 +382,7 @@ static const CGFloat CARD_HEIGHT = 60;
     [cardView removeFromSuperview];
   }
   for (SetCardView *cardView in tempViewArray) {
-    cardView.center = CGPointMake(-CARD_WIDTH ,-CARD_HEIGHT);
+    cardView.center = location;
     [self.boardView addSubview:cardView];
   }
   
@@ -426,7 +447,7 @@ static const CGFloat CARD_HEIGHT = 60;
   
   for (SetCardView *cardView in [self.boardView subviews]) {
     SetCard *card = (SetCard *) [self.game cardAtIndex:cardView.index];
-    [cardView setBackgroundColorByChosen:card.chosen];
+    cardView.faceUp = card.chosen;
     if (card.matched) {
       [self removeCardAndAnimate:cardView];
     }
