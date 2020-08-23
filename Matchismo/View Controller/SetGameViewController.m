@@ -25,10 +25,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) IBOutlet GameBoardView *boardView;
 @property (strong, nonatomic) IBOutlet DeckView *deckView;
-@property(strong,nonatomic) Game *game;
+@property (strong,nonatomic) Game *game;
 @property (nonatomic) int drawCount;
 @property (strong, nonatomic) NSMutableArray<SetCardView *> *cardViewArray;
-@property(nonatomic) BOOL isPiled;
+@property (nonatomic) BOOL isPiled;
+@property (nonatomic) BOOL flag;
 @end
 
 
@@ -47,18 +48,17 @@ static const CGFloat CARD_HEIGHT = 60;
 #pragma mark -Inits
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+  [super viewDidLoad];
+  // Do any additional setup after loading the view.
+
+  //flip screen recognizer
+  [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
   
-    //flip screen recognizer
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
-    
-    //pinch screen recognizer
-    UIPinchGestureRecognizer *pinchRecognizer =
-        [[UIPinchGestureRecognizer alloc] initWithTarget: self action:@selector(pinch:) ];
-    [self.view addGestureRecognizer:pinchRecognizer];
-    
-    [self newGame];
+  //pinch screen recognizer
+  UIPinchGestureRecognizer *pinchRecognizer =
+      [[UIPinchGestureRecognizer alloc] initWithTarget: self action:@selector(pinch:) ];
+  [self.view addGestureRecognizer:pinchRecognizer];
+  [self newGame];
 }
 
 
@@ -75,20 +75,25 @@ static const CGFloat CARD_HEIGHT = 60;
   self.drawCount = 0;
   
   [self setSubViews];
-
   [self constraintAllViews];
-  [self.deckView layoutIfNeeded];
   
+  [self.view layoutIfNeeded];
   self.cardViewArray = [self createCardViewArray];
-
+  
   UITapGestureRecognizer *deckTapRecognizer =
   [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(deckTap:) ];
   [self.deckView addGestureRecognizer:deckTapRecognizer];
 
   [self.boardView layoutIfNeeded];
+  
+
   [self dealNCards:STARTING_CARDS_NUM];
   [self updateUI];
 
+}
+
+- (void) viewWillLayoutSubviews {
+  [self updateUI];
 }
 
 - (void)setSubViews {
@@ -182,16 +187,14 @@ static const CGFloat CARD_HEIGHT = 60;
   [self.deckView.rightAnchor constraintEqualToAnchor:self.boardView.rightAnchor constant:0].active = YES;
   [self.deckView.widthAnchor constraintEqualToConstant:CARD_WIDTH].active = YES;
   [self.deckView.heightAnchor constraintEqualToConstant:CARD_HEIGHT].active = YES;
-
 }
 
 - (void)constraintAllViews {
-  
+
   [self constraintBoardView];
   [self constraintResetButton];
   [self constraintScoreLabel];
   [self constraintDeckView];
-  
 }
 
 #pragma mark -Updating
@@ -241,6 +244,7 @@ static const CGFloat CARD_HEIGHT = 60;
       [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(cardPan:) ];
   [cardView addGestureRecognizer:cardPanRecognizer];
   
+  cardView.center = [self.view convertPoint:self.deckView.center toView:nil];
   
   [self.boardView addSubview:cardView];
   
@@ -437,10 +441,6 @@ static const CGFloat CARD_HEIGHT = 60;
   CGPoint newLocation = CGPointMake(centerOfScreen.x + xDistance, centerOfScreen.y + yDistance) ;
   
   return newLocation ;
-}
-
-- (void) viewWillLayoutSubviews {
-  [self updateUI];
 }
 
 - (void)checkAndRemoveCards{

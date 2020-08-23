@@ -10,16 +10,29 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-      self.backgroundColor = nil;
-      
+      self.backgroundColor = [UIColor clearColor];
+
     }
     return self;
 }
 
+#define CORNER_RADIUS 12.0
+#define CORNER_STD_HEIGHT 180.0
+
+- (CGFloat)cornerScaleFactor {
+  return self.bounds.size.height / CORNER_STD_HEIGHT;
+}
+
+- (CGFloat)cornerRadius {
+  return CORNER_RADIUS *[self cornerScaleFactor];
+}
+
 - (void)drawRect:(CGRect)rect{
-  
-  [[UIImage imageNamed:@"cardBack"] drawInRect:self.bounds];
-  [[UIColor whiteColor] setFill];
+
+  UIImage *deckImage = [UIImage imageNamed:@"cardBack"];
+  [deckImage drawInRect:self.bounds];
+  self.layer.cornerRadius = [self cornerRadius];
+  self.clipsToBounds = YES;
 }
 
 @end
